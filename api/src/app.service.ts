@@ -10,9 +10,20 @@ export class AppService {
     private usersRepository: Repository<User>,
   ) {}
 
+  async getAllNames() {
+    const allNames = await this.usersRepository.find();
+    console.log(allNames);
+    return allNames;
+  }
+
+  async createName(name) {
+    await this.usersRepository.save({name});
+    const names = this.getAllNames();
+    return names
+
+
+  }
   async getHello(): Promise<string> {
-    const response = await this.usersRepository.save({name: 'Jane Doe'});
-    console.log(response);
     return 'Hello World!';
   }
 }

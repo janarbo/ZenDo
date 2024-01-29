@@ -16,7 +16,7 @@ import { User } from './user.entity';
       database: 'todos',
       entities: [User],
       synchronize: true,
-      logging: true,
+      //logging: true,
     }),
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot(),
