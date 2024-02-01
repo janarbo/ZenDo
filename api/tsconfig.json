@@ -16,6 +16,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "types": ["node", "class-validator","jest"],
+  },
+  "include": ["src/**/*.ts", "migrations/*.ts", "entities/*.ts"],
 }
