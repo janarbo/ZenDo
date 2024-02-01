@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe} from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe, Res} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -24,4 +24,15 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
+
+  // @Post('logout')
+  // logout(@Res() res: Response): void {
+  //   const success = this.authService.logout();
+  //   if (success) {
+  //    res.status(HttpStatus.OK).json({});
+  //   } else {
+  //   res.sendStatus(HttpStatus.BAD_REQUEST); // Set status and send an empty response
+  //   }
+  // }
+
 }
