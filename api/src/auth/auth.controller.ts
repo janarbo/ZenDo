@@ -3,10 +3,20 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
+type signInDto = {
+    username: string;
+    password: string;
+}
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @UseGuards(AuthGuard)
+  @Get('user')
+  getUserData(@Request() req) {
+    return req.user;
+  }
 
   @Post('signup')
   async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
@@ -15,8 +25,8 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.name, signInDto.password);
+  signIn(@Body() signInDto: signInDto) {
+    return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
   @UseGuards(AuthGuard)
@@ -31,7 +41,7 @@ export class AuthController {
   //   if (success) {
   //    res.status(HttpStatus.OK).json({});
   //   } else {
-  //   res.sendStatus(HttpStatus.BAD_REQUEST); // Set status and send an empty response
+  //   res.sendStatus(HttpStatus.BAD_REQUEST)
   //   }
   // }
 
