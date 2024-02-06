@@ -8,4 +8,16 @@ export class User {
   @Column()
   name: string;
 
+  @Column()
+  username: string;
+
+  @Column()
+  email:string;
+
+  @Column()
+  password:string;
+
+  @Column()
+  photo: string;
+
 }
