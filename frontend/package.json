@@ -11,13 +11,13 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.76",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
     "axios": "^1.6.7",
     "framer-motion": "^11.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
+    "routes": "^2.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -44,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.18"
   }
 }
