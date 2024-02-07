@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage} from '@chakra-ui/react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const isInvalidEmail = (email:string) => {
@@ -22,6 +23,8 @@ const isInvalidPass2 = (pass1: string, pass2: string) => {
 }
 
 const SignUp = () => {
+  const navigate = useNavigate()
+
   const[name, setName] = useState('');
   const[email, setEmail] = useState('');
   const[username, setUsername] = useState('');
@@ -94,6 +97,9 @@ const SignUp = () => {
         password,
       }).then((response) => {
         console.log('RESPONSE', response)
+        const token = response.data;
+        localStorage.setItem('token', token);
+
         setName('');
         setEmail('');
         setUsername('');
@@ -104,6 +110,8 @@ const SignUp = () => {
         setSubmitClickedUsername(false);
         setSubmitClickedPassword(false);
         setSubmitClickedSecondPassword(false);
+
+        navigate('/projects');
       });
     }
   }
