@@ -46,8 +46,9 @@ const LogIn = () => {
         password,
       })
       .then ((response) => {
-      const token = response.data;
-      localStorage.setItem("token", token);
+      const token = response.data.access_token;
+      localStorage.setItem("access_token", token);
+      console.log("TOKEN", response.data)
       setUsername('');
       setPassword('');
 
@@ -66,6 +67,7 @@ const LogIn = () => {
     }). catch((error) => {
         setUsername('');
         setPassword('');
+        setError('');
 
         setSubmitClickedUsername(false);
         setSubmitClickedPassword(false);

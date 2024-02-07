@@ -15,37 +15,23 @@ export class AuthService {
     return await bcrypt.hash(password, 10);
   }
 
-  // async signIn(username: string, password: string) {
-  // const user = await this.usersService.findUserByUsername(username);
-  // if (user !== null) {
-  //   const passwordMatch = await bcrypt.compare(password, user.password);
-  //   if (!passwordMatch) {
-  //     throw new UnauthorizedException();
-  // }
-  // const payload = { sub: user.id, username: user.username };
-  // return {
-  //   access_token: await this.jwtService.signAsync(payload),
-  //  };
-  // } else {
-  //   console.log('user does not exist');
-  //  }
-  // }
   async signIn(username: string, password: string) {
-    const user = await this.usersService.findUserByUsername(username);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
+  const user = await this.usersService.findUserByUsername(username);
+  if (user !== null) {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const payload = { sub: user.id, username: user.username };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+      throw new UnauthorizedException();
   }
+  const payload = { sub: user.id, username: user.username };
+  return {
+    access_token: await this.jwtService.signAsync(payload),
+   };
+  } else {
+    console.log('user does not exist');
+   }
+ }
+
+
 
   async signUp(createUserDto: CreateUserDto): Promise<{ access_token: string }> {
     const hashedPassword = await this.hashPassword(createUserDto.password);
@@ -67,6 +53,16 @@ export class AuthService {
     });
 
     return { access_token: accessToken };
+  }
+
+  async getProfileData(username: string) {
+
+    const user = await this.usersService.findUserByUsername(username);
+    return {
+      email: user.email,
+      name: user.name,
+      username: user.username,
+    }
   }
 
 }
