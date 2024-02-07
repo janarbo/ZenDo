@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage} from '@chakra-ui/react'
+import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage, useToast} from '@chakra-ui/react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { error } from 'console';
 
 
 const isInvalidEmail = (email:string) => {
@@ -24,6 +25,7 @@ const isInvalidPass2 = (pass1: string, pass2: string) => {
 
 const SignUp = () => {
   const navigate = useNavigate()
+  const toast = useToast()
 
   const[name, setName] = useState('');
   const[email, setEmail] = useState('');
@@ -90,7 +92,7 @@ const SignUp = () => {
     ) {
       return;
     } else {
-    axios.post('http://localhost:3030/auth/signup', {
+      axios.post('http://localhost:3030/auth/signup', {
         name,
         email,
         username,
@@ -112,7 +114,40 @@ const SignUp = () => {
         setSubmitClickedSecondPassword(false);
 
         navigate('/projects');
-      });
+
+        toast({
+          title: 'Account created.',
+          description: "We've created your account for you.",
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        setName('');
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        setSecondPassword('');
+        setSubmitClickedName(false);
+        setSubmitClickedEmail(false);
+        setSubmitClickedUsername(false);
+        setSubmitClickedPassword(false);
+        setSubmitClickedSecondPassword(false);
+
+        console.log('ERROR', error);
+
+        toast({
+          title: 'ERROR',
+          description: error.response.data.message,
+          // or add message: "We are not able to create your account, please try again!"
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+
+      })
+
     }
   }
 
@@ -176,3 +211,6 @@ const SignUp = () => {
 };
 
 export default SignUp;
+function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; }) {
+  throw new Error('Function not implemented.');
+}
