@@ -88,7 +88,7 @@ const SignUp = () => {
         username === '' ||
         password === '' ||
         secondPassword !== password ||
-        secondPassword == ''
+        secondPassword === ''
     ) {
       return;
     } else {

@@ -1,4 +1,4 @@
-import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage, useToast } from '@chakra-ui/react';
+import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,65 +30,73 @@ const LogIn = () => {
     setPassword(e.target.value);
   }
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) =>{
-    event.preventDefault();
+  const handleSubmit = () =>{
+    console.log("USERNAME", username);
+    console.log("PASSWORD", password);
     setSubmitClickedUsername(true);
     setSubmitClickedPassword(true);
+
     if (username === '' || password === '') {
       return;
     }
 
-    try {
-      const response = await axios.post('http://localhost:3030/auth/login', {
+    else {
+       axios.post('http://localhost:3030/auth/login', {
         username,
-        password
-      });
-      console.log('RESPONSE', response.status)
-
-      if(response.status === 200 ) {
-      console.log('Login Successful', response.data);
+        password,
+      })
+      .then ((response) => {
+      const token = response.data;
+      localStorage.setItem("token", token);
       setUsername('');
       setPassword('');
-      navigate('/projects');
+
+      setSubmitClickedUsername(false);
+      setSubmitClickedPassword(false);
+
+      navigate("/projects");
       toast({
         title: 'Login Successful',
-        description: "Welcome Back",
+        description: `Welcome back, ${username}`,
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
 
-    }
-    } catch(error: any) {
-      if (error.response && error.response.status === 401) {
+    }). catch((error) => {
         setUsername('');
         setPassword('');
+
+        setSubmitClickedUsername(false);
+        setSubmitClickedPassword(false);
+
         console.log('Login Failed', error);
 
+        toast({
+          title: 'Login Failed',
+          description: "There was an error loggingg you into your account. Please try again!",
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+
         setError('Login Failed, Please check your credentials');
-      } else {
-        setUsername('');
-        setPassword('');
-        console.log('Login Failed', error);
-        setError('Login Failed. Please try again later.');
-      }
+      });
     }
   };
 
   return (
     <Box>
-      <Text textAlign='center' mt={20} mb={4} fontSize={20}> Login </Text>
+      <Text textAlign='center' mt={20} mb={4} fontSize={20}> Log into Your Account </Text>
         <Box
-          maxW='100%'
+          maxW='60%'
           m='0 auto'
           display='flex'
           flexDirection='column'
           alignItems="center"
           gap={4}
-
         >
-        <form onSubmit={handleSubmit}>
-        <FormControl isInvalid={isErrorUsername} isRequired>
+        <FormControl isInvalid={isErrorUsername} isRequired >
             <FormLabel>Username</FormLabel>
             <Input type='text' value={username} onChange={onChangeUsername} />
             {!isErrorUsername ? null: (
@@ -103,8 +111,7 @@ const LogIn = () => {
               <FormErrorMessage>Password is required.</FormErrorMessage>
             )}
         </FormControl>
-        <Button w="100%"  type='submit' mt={2}>Submit</Button>
-        </form>
+        <Button w="100%"  type='submit' onClick={handleSubmit} mt={2}>Submit</Button>
 
         </Box>
     </Box>
