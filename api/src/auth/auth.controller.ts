@@ -2,6 +2,8 @@ import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, 
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import * as sanitizeHtml from 'sanitize-html';
+
 
 type signInDto = {
     username: string;
