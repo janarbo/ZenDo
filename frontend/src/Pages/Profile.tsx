@@ -1,6 +1,8 @@
-import { Avatar, Box, Button, Center, Text, useToast} from "@chakra-ui/react";
+import { Avatar, Box, Button, Center, Text, useToast, IconButton} from "@chakra-ui/react";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import UserDetailsRow from "../components/Profile/userDetailsRow";
+
 
 
 type Data = {
@@ -8,6 +10,8 @@ type Data = {
     name: string;
     username: string;
 }
+
+
 const Profile = () => {
     const data = useLoaderData() as Data;
     const navigate = useNavigate();
@@ -27,6 +31,14 @@ const Profile = () => {
           });
     }
 
+    const userDetailsRows = [
+        { field: 'Name', value: data.name },
+        { field: 'Email', value: data.email },
+        { field: 'Username', value: data.username },
+        { field: 'Password', value: '********' }
+
+    ]
+
     return (
     <Box>
         <Text textAlign='center' mt={20} mb={4} fontSize={20}> Account Details</Text>
@@ -36,27 +48,26 @@ const Profile = () => {
             <Box>
                 <Avatar  size="2xl" name={data.name} display='flex' alignItems='center' />
             </Box>
-            <Box display="flex" w='100%' gap={5} flexDirection='column' >
-                <Box display='flex'>
-                    <Text w='40%'>Name:</Text>
-                    <Text>{data.name}</Text>
+            <Box display="flex" w='100%' gap={3} flexDirection='column' >
+                    {/* Map over the userDetailsRows array to render UserDetailsRow dynamically */}
+                    {userDetailsRows.map((row, index) => (
+                        <UserDetailsRow key={index} field={row.field} value={row.value} />
+                    ))}
                 </Box>
-                <Box  display='flex'>
-                    <Text w='40%'>Username:</Text>
-                    <Text>{data.username}</Text>
-                </Box>
-                <Box  display='flex'>
-                    <Text w='40%'>Email:</Text>
-                    <Text>{data.email}</Text>
-                </Box>
-                <Box display='flex'>
-                    <Text w='40%'>Password:</Text>
-                    <Text>*******</Text>
-                </Box>
-            </Box>
+            {/* <Box display="flex" w='100%' gap={3} flexDirection='column' >
+                <UserDetailsRow field='Name' value={data.name} />
+                <UserDetailsRow field='Email' value={data.email} />
+                <UserDetailsRow field='Username' value={data.username} />
+                <UserDetailsRow field='Password' value='********' />
+         </Box> */}
         </Box>
-        <Button onClick={logOut}>Log out</Button>
-    
+        <Box display='flex' gap={4} justifyContent='center'>
+             <Button onClick={logOut}>Log out</Button>
+             <Button onClick={()=> {}}> Delete Accout</Button>
+
+        </Box>
+
+
     </Box>
         );
 }
