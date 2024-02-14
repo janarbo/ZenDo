@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage, useToast} from '@chakra-ui/react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { error } from 'console';
 
 
 const isInvalidEmail = (email:string) => {

@@ -65,4 +65,24 @@ export class AuthService {
     }
   }
 
+  async resetPassword(email: string) {
+    const user = await this.usersService.findUserByEmail(email);
+    if (user == null) {
+      throw new UnauthorizedException('email does not exist');
+    }
+    const payload = { sub: user.id,  username:user.username };
+    const token = await this.jwtService.signAsync(payload,  {
+      secret : `${user.password} - ${user.created_at}`
+    });
+    return token;
+
+  }
+
+  async saveNewPassword(newPassword, token, id) {
+    const user = await this.usersService.findUserByUserID(id);
+    const secret = `${user.password} - ${user.created_at}`
+
+
+  }
+
 }

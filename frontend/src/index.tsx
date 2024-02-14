@@ -11,6 +11,7 @@ import SignUp from "./Pages/SignUp";
 import Projects from "./Pages/Project";
 import Profile from "./Pages/Profile";
 import axios from "axios";
+import ResetPassword from "./Pages/ResetPassword";
 
 
 
@@ -55,6 +56,11 @@ const router = createBrowserRouter([
 
         },
       },
+      {
+        path: "/reset-password/",
+        element: <ResetPassword/>,
+      },
+
     ],
   },
 ]);

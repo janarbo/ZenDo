@@ -35,9 +35,21 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return this.authService.getProfileData(req.user.username)
-
-    }
   }
+
+
+  @Post('reset-password')
+  resetPassword(@Body('email') email: string) {
+    return this.authService.resetPassword(email);
+  }
+}
+//   @Post('save-new-password')
+//   saveNewPassword(@Body('')) {
+//     return this.authService.saveNewPassword(newPassword, token, id);
+//   }
+
+// }
+
 
   // @Post('logout')
   // logout(@Res() res: Response): void {
@@ -48,5 +60,3 @@ export class AuthController {
   //   res.sendStatus(HttpStatus.BAD_REQUEST)
   //   }
   // }
-
-

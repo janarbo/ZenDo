@@ -12,6 +12,7 @@ const LogIn = () => {
   const[error, setError] = useState('');
   const[submitClickedUsername, setSubmitClickedUsername] = useState(false);
   const[submitClickedPassword, setSubmitClickedPassword] = useState(false);
+  const[email, setEmail] = useState('')
 
 
 
@@ -29,6 +30,20 @@ const LogIn = () => {
     setSubmitClickedPassword(false);
     setPassword(e.target.value);
   }
+  const onChangeEmail = (e:any) => {
+    setEmail(e.target.value);
+
+  }
+
+  const onSubmiEmail = () => {
+    axios.post('http://localhost:3030/auth/reset-password', {
+    email,
+    })
+    .then ((response) => {
+
+    })
+  }
+
 
   const handleSubmit = () =>{
     console.log("USERNAME", username);
@@ -115,7 +130,15 @@ const LogIn = () => {
         </FormControl>
         <Button w="100%"  type='submit' onClick={handleSubmit} mt={2}>Submit</Button>
 
+        <FormControl >
+            <FormLabel>Enter your email:</FormLabel>
+            <Input type='text' value={email} onChange={onChangeEmail} />
+            </FormControl>
+
+            <Button onClick={onSubmiEmail}>Submit</Button>
+
         </Box>
+
     </Box>
   );
 };

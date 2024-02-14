@@ -19,5 +19,6 @@ export class User {
 
   @Column()
   photo: string;
+  created_at: any;
 
 }
