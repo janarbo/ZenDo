@@ -12,6 +12,11 @@ import Projects from "./Pages/Project";
 import Profile from "./Pages/Profile";
 import axios from "axios";
 import ResetPassword from "./Pages/ResetPassword";
+import { createStandaloneToast } from "@chakra-ui/react";
+
+
+const { ToastContainer, toast } = createStandaloneToast()
+
 
 
 
@@ -61,14 +66,28 @@ const router = createBrowserRouter([
             );
             return response.data;
             } catch (error) {
-              console.log('ERROR', error);
-              return ('error');
+              toast({
+                title: 'An error occurred.',
+                description: 'You must be signed in to view this page.',
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+              })
+
+              return redirect('/log-in');
             }
            } else {
-              console.log('No Token');
-              return ('No Token');
-          }
+            console.log("Token", token)
+              toast({
+                title: 'An error occurred.',
+                description: 'You must have an account to view this page.',
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+              })
+              return redirect('/sign-up')
 
+          }
         },
       },
       {
@@ -83,4 +102,8 @@ const router = createBrowserRouter([
 const root = createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(<RouterProvider router={router} />);
+root.render(
+      <>
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </>);
