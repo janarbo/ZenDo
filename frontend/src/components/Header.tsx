@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 
 const pages = [
-    {name: 'Login', path:'/log-in', showWhenLoggedIn: false},
-    {name: 'Sign up', path:'/sign-up', showWhenLoggedIn: false},
-    {name: 'Projects', path:'/projects', showWhenLoggedIn: true},
+    {name: 'Log In', path:'/log-in', showWhenLoggedIn: false},
+    {name: 'Sign Up', path:'/sign-up', showWhenLoggedIn: false},
+    {name: 'My Todos', path:'/projects', showWhenLoggedIn: true},
     {name: 'Account Details', path:'/profile', showWhenLoggedIn: true},
 
 ]
@@ -25,7 +25,7 @@ const Header = ({loggedIn}: Props) =>{
                 height='120px'
                 />
 
-                <Heading  fontFamily='Lato, sans-serif' lineHeight='120px' ml={0} alignItems='center' fontSize={24}>Project Planning Tool</Heading>
+                <Heading  fontFamily='Lato, sans-serif' lineHeight='120px' ml={0} alignItems='center' fontSize={24}>ZenDo</Heading>
             </Box>
         <Box display='flex' justifyContent='space-around' w='50%'>
             {pages.map((page)  => {

@@ -1,12 +1,15 @@
-import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast } from '@chakra-ui/react';
+import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Context } from '../App';
+import ForgotPasswordModal from '../components/Login/ForgotPasswordModal';
 
 const LogIn = () => {
   const navigate = useNavigate()
   const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
 
   const[username, setUsername] = useState('');
   const[password, setPassword] = useState('');
@@ -129,16 +132,22 @@ const LogIn = () => {
               <FormErrorMessage>Password is required.</FormErrorMessage>
             )}
         </FormControl>
-        <Button w="100%"  type='submit' onClick={handleSubmit} mt={2}>Submit</Button>
+        <Button bgColor='#E6E6FA' w="100%"  type='submit' onClick={handleSubmit} mt={2}>Submit</Button>
 
-        <FormControl >
+        {/* <FormControl >
             <FormLabel>Enter your email:</FormLabel>
             <Input type='text' value={email} onChange={onChangeEmail} />
-            </FormControl>
+            </FormControl> */}
 
 
 
         </Box>
+        <Box display='flex' gap={10} justifyContent='center' mt={6}>
+          <Text lineHeight='40px' fontSize='14px'>Forgot your password?</Text>
+          <Button bgColor='#E6E6FA' fontSize='14px' onClick={onOpen}>Reset Password</Button>
+        </Box>
+        <ForgotPasswordModal isOpen={isOpen} onClose={onClose} />
+
 
     </Box>
   );

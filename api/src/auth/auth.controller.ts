@@ -2,8 +2,9 @@ import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, 
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import * as sanitizeHtml from 'sanitize-html';
-import { IsNotEmpty } from 'class-validator';
+import sanitizeHtml from 'sanitize-html';
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 
 type signInDto = {
@@ -22,6 +23,12 @@ export class AccountDetailDto  {
   value: string;
 
 
+}
+
+export class Email {
+  @IsEmail(undefined, {message: 'Please enter a valid email address!'})
+  @Transform((params) => sanitizeHtml(params.value))
+  email: string;
 }
 
 @Controller('auth')
@@ -53,8 +60,8 @@ export class AuthController {
 
 
   @Post('reset-password')
-  resetPassword(@Body('email') email: string) {
-    return this.authService.resetPassword(email);
+  resetPassword(@Body() email: Email) {
+   console.log("EMAIL", email);
   }
 
   @UseGuards(AuthGuard)
