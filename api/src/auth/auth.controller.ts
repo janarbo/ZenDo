@@ -3,11 +3,25 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as sanitizeHtml from 'sanitize-html';
+import { IsNotEmpty } from 'class-validator';
 
 
 type signInDto = {
     username: string;
     password: string;
+}
+
+export class AccountDetailDto  {
+  @IsNotEmpty()
+  username: string;
+
+  @IsNotEmpty()
+  field: string;
+
+  @IsNotEmpty()
+  value: string;
+
+
 }
 
 @Controller('auth')
@@ -41,6 +55,12 @@ export class AuthController {
   @Post('reset-password')
   resetPassword(@Body('email') email: string) {
     return this.authService.resetPassword(email);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('change-account-detail')
+  changeAccountDetail(@Body() accountDetailDto: AccountDetailDto) {
+    return this.authService.changeAccountDetails(accountDetailDto);
   }
 }
 //   @Post('save-new-password')

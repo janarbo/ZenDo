@@ -17,8 +17,6 @@ const Profile = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
-    console.log("LOADER DATA", data)
-
     const logOut = () => {
         localStorage.removeItem('access_token');
         navigate('/log-in')
@@ -49,17 +47,10 @@ const Profile = () => {
                 <Avatar  size="2xl" name={data.name} display='flex' alignItems='center' />
             </Box>
             <Box display="flex" w='100%' gap={3} flexDirection='column' >
-                    {/* Map over the userDetailsRows array to render UserDetailsRow dynamically */}
                     {userDetailsRows.map((row, index) => (
-                        <UserDetailsRow key={index} field={row.field} value={row.value} />
+                        <UserDetailsRow key={index} field={row.field} value={row.value} username={data.username} />
                     ))}
                 </Box>
-            {/* <Box display="flex" w='100%' gap={3} flexDirection='column' >
-                <UserDetailsRow field='Name' value={data.name} />
-                <UserDetailsRow field='Email' value={data.email} />
-                <UserDetailsRow field='Username' value={data.username} />
-                <UserDetailsRow field='Password' value='********' />
-         </Box> */}
         </Box>
         <Box display='flex' gap={4} justifyContent='center'>
              <Button onClick={logOut}>Log out</Button>

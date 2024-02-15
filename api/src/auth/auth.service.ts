@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
+import { AccountDetailDto } from './auth.controller';
 
 @Injectable()
 export class AuthService {
@@ -85,4 +86,23 @@ export class AuthService {
 
   }
 
+ async changeAccountDetails(accountDetailDto: AccountDetailDto) {
+
+
+  const user = await this.usersService.findUserByUsername(
+    accountDetailDto.username,
+  )
+
+  if (accountDetailDto.field === 'password') {
+    const plainTextPassword = accountDetailDto.value;
+    const hashedPassword = await this.hashPassword(plainTextPassword);
+    user[accountDetailDto.field] = hashedPassword;
+  } else {
+    user[accountDetailDto.field] = accountDetailDto.value;
+  }
+  return await this.usersService.create(user);
+ }
+
+
+ 
 }

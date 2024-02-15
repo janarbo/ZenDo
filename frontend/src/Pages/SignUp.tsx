@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
-import { Box, Input, Text, Button, FormControl, FormLabel, FormHelperText, FormErrorMessage, useToast} from '@chakra-ui/react'
+import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast} from '@chakra-ui/react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-const isInvalidEmail = (email:string) => {
+export const isInvalidEmail = (email:string) => {
   const emailFormat =  /\S+@\S+\.\S+/;
   if (email.match(emailFormat) && email.length > 0) {
     return false;
