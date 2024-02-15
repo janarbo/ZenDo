@@ -35,14 +35,6 @@ const LogIn = () => {
 
   }
 
-  const onSubmiEmail = () => {
-    axios.post('http://localhost:3030/auth/reset-password', {
-    email,
-    })
-    .then ((response) => {
-
-    })
-  }
 
 
   const handleSubmit = () =>{
@@ -80,6 +72,8 @@ const LogIn = () => {
       });
 
     }). catch((error) => {
+      console.log('Login Error:', error); // Log the error response to see what the server is returning
+
         setUsername('');
         setPassword('');
         setError('');
@@ -97,7 +91,11 @@ const LogIn = () => {
           isClosable: true,
         });
 
-        setError('Login Failed, Please check your credentials');
+       if (error.response && error.response.status === 401) {
+        setError('Invalid username or password');
+       } else {
+        setError('Login Failed, please check your credetials')
+       }
       });
     }
   };
@@ -135,7 +133,7 @@ const LogIn = () => {
             <Input type='text' value={email} onChange={onChangeEmail} />
             </FormControl>
 
-            <Button onClick={onSubmiEmail}>Submit</Button>
+
 
         </Box>
 
@@ -144,3 +142,14 @@ const LogIn = () => {
 };
 
 export default LogIn;
+
+
+  // const onSubmiEmail = () => {
+  //   axios.post('http://localhost:3030/auth/reset-password', {
+  //   email,
+  //   })
+  //   .then ((response) => {
+
+  //   })
+  // }
+   {/* <Button onClick={onSubmiEmail}>Submit</Button> */}

@@ -16,6 +16,7 @@ export class AuthService {
     return await bcrypt.hash(password, 10);
   }
 
+
   async signIn(username: string, password: string) {
   const user = await this.usersService.findUserByUsername(username);
   if (user !== null) {
@@ -28,9 +29,9 @@ export class AuthService {
     access_token: await this.jwtService.signAsync(payload),
    };
   } else {
-    console.log('user does not exist');
-   }
- }
+    throw new UnauthorizedException('Invalid credentials');
+  }
+} 
 
 
 
@@ -56,9 +57,9 @@ export class AuthService {
     return { access_token: accessToken };
   }
 
-  async getProfileData(username: string) {
+  async getProfileData(id: number) {
 
-    const user = await this.usersService.findUserByUsername(username);
+    const user = await this.usersService.findUserByUserID(id);
     return {
       email: user.email,
       name: user.name,
@@ -100,9 +101,14 @@ export class AuthService {
   } else {
     user[accountDetailDto.field] = accountDetailDto.value;
   }
-  return await this.usersService.create(user);
+  const updatedUser = await this.usersService.create(user);
+  return {
+    name: updatedUser.name,
+    email: updatedUser.email,
+    username: updatedUser.username,
+  };
  }
 
 
- 
+
 }

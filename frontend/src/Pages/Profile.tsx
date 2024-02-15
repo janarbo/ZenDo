@@ -1,11 +1,11 @@
 import { Avatar, Box, Button, Center, Text, useToast, IconButton} from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import UserDetailsRow from "../components/Profile/userDetailsRow";
 
 
 
-type Data = {
+export type Data = {
     email: string;
     name: string;
     username: string;
@@ -13,7 +13,9 @@ type Data = {
 
 
 const Profile = () => {
-    const data = useLoaderData() as Data;
+    const loaderData = useLoaderData() as Data;
+    const[data, setData] = useState(loaderData);
+
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -48,7 +50,13 @@ const Profile = () => {
             </Box>
             <Box display="flex" w='100%' gap={3} flexDirection='column' >
                     {userDetailsRows.map((row, index) => (
-                        <UserDetailsRow key={index} field={row.field} value={row.value} username={data.username} />
+                        <UserDetailsRow
+                        key={index}
+                        field={row.field}
+                        value={row.value}
+                        username={data.username}
+                        setData={setData}
+                        />
                     ))}
                 </Box>
         </Box>
