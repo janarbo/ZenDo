@@ -95,11 +95,21 @@ export class AuthService {
 
   }
 
-  async saveNewPassword(newPassword, token, id) {
-    const user = await this.usersService.findUserByUserID(id);
-    const secret = `${user.password} - ${user.created_at}`
-
-
+  async saveNewPassword(newPassword: string, id: number, token: string) {
+    console.log("NEW PASSWORD", newPassword)
+    console.log("ID", id)
+    console.log("TOKEN", token)
+    const user = await this.usersService.findUserByUserID(id)
+    await this.jwtService.verifyAsync(token, {
+      secret: user.password,
+    }).catch((error)=>{
+      console.log("ERROR", error);
+      throw new UnauthorizedException;
+    }).then(async ()=> {
+      const hashedPassword = await this.hashPassword(newPassword);
+      user.password = hashedPassword;
+      return await this.usersService.create(user);
+    });
   }
 
  async changeAccountDetails(accountDetailDto: AccountDetailDto) {

@@ -31,6 +31,21 @@ export class Email {
   email: string;
 }
 
+export class NewPasswordDto {
+  @IsNotEmpty()
+  @Transform((params) => sanitizeHtml(params.value))
+  newPassword: string;
+
+  @IsNotEmpty()
+  id: number;
+
+  @IsNotEmpty()
+  token: string;
+}
+
+
+
+
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -69,11 +84,17 @@ export class AuthController {
   changeAccountDetail(@Body() accountDetailDto: AccountDetailDto) {
     return this.authService.changeAccountDetails(accountDetailDto);
   }
+
+  @Post('save-new-password')
+  saveNewPassword(@Body() body: NewPasswordDto) {
+    return this.authService.saveNewPassword(
+      body.newPassword,
+      body.id,
+      body.token,
+      );
+  }
 }
-//   @Post('save-new-password')
-//   saveNewPassword(@Body('')) {
-//     return this.authService.saveNewPassword(newPassword, token, id);
-//   }
+
 
 // }
 

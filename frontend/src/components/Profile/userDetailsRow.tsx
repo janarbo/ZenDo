@@ -43,7 +43,7 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                 return;
             }
         } else {
-            if (valueState == '') {
+            if (valueState === '') {
                 toast({
                     title: 'ERROR',
                     description: 'Please enter a valid value!',

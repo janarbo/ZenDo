@@ -1,11 +1,12 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from "@chakra-ui/react"
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Text, useToast } from "@chakra-ui/react"
+import axios from "axios";
 import React, { useState } from "react"
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
-    const params = useParams();
-    console.log("PARAMS", params)
-    const {access_token, id} = useParams();
+    const navigate = useNavigate();
+    const toast = useToast();
+    const {token, id} = useParams();
     const[password, setPassword] = useState('')
     const[secondPassword, setSecondPassword] = useState('')
 
@@ -35,9 +36,38 @@ const ResetPassword = () => {
 
         setSubmitPassword(true);
         setSubmitSecondPassword(true);
+
+        axios.post("http://localhost:3030/auth/save-new-password", {
+            newPassword: password,
+            id,
+            token,
+        })
+        .then((response) => {
+            console.log("RESPONSE", response.data);
+            setPassword("");
+            setSecondPassword("");
+            navigate("/log-in");
+            toast({
+                title: 'Success',
+                description: `Your password hass been reset, please log in with your new password`,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+              });
+
+
+        }).catch((error)=>{
+            toast({
+                title: 'Error',
+                description: "There was an error. Please try again!",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+        })
     }
 
-    console.log('Params', access_token, id)
+    console.log('PARAMSS', token)
     return(
         <Box>
       <Text textAlign='center' mt={20} mb={4} fontSize={20}>Reset Your Password </Text>
