@@ -60,8 +60,8 @@ export class AuthController {
 
 
   @Post('reset-password')
-  resetPassword(@Body() email: Email) {
-   console.log("EMAIL", email);
+  resetPassword(@Body() body: Email) {
+    return this.authService.sendResetPasswordEmail(body.email);
   }
 
   @UseGuards(AuthGuard)

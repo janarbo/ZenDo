@@ -35,15 +35,34 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
                .then((response) => {
                  setEmail("");
                  console.log("RESPONSE", response)
+                 toast({
+                  title: 'Success',
+                  description: 'Check your email account for further directions',
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: true,
+                });
                })
                .catch((error)=> {
-                 toast({
-                     title: 'ERROR',
-                     description: error.response.data.message,
-                     status: 'error',
-                     duration: 3000,
-                     isClosable: true,
-                   });
+                if (error.response.data.message === "email does not exist")
+                {
+                  toast({
+                    title: 'Success',
+                    description: "Check your email account for further direction",
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                  });
+                } else{
+                  toast({
+                    title: 'ERROR',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                  });
+
+                }
 
                });}
 

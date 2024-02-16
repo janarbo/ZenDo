@@ -4,16 +4,33 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
 import { AccountDetailDto } from './auth.controller';
+import { User } from 'src/entities/user.entity';
+import { MailModule } from 'src/mail/mail.module';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private mailService: MailService,
     private jwtService: JwtService,
+
   ) {}
 
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
+  }
+
+  async createAccessToken(user: User, secret?:string) {
+    const payload = { sub:user.id}
+    if (secret) {
+      return await this.jwtService.signAsync(payload,
+        {secret: user.password,
+          expiresIn: "10m",
+        });
+    } else {
+      return await this.jwtService.signAsync(payload);
+    }
   }
 
 
@@ -31,7 +48,7 @@ export class AuthService {
   } else {
     throw new UnauthorizedException('Invalid credentials');
   }
-} 
+}
 
 
 
@@ -67,16 +84,14 @@ export class AuthService {
     }
   }
 
-  async resetPassword(email: string) {
+  async sendResetPasswordEmail(email) {
     const user = await this.usersService.findUserByEmail(email);
     if (user == null) {
       throw new UnauthorizedException('email does not exist');
     }
-    const payload = { sub: user.id,  username:user.username };
-    const token = await this.jwtService.signAsync(payload,  {
-      secret : `${user.password} - ${user.created_at}`
-    });
-    return token;
+    const token = await this.createAccessToken(user, user.password);
+    return await this.mailService.sendPasswordResetEmail(user, token);
+
 
   }
 
@@ -88,8 +103,6 @@ export class AuthService {
   }
 
  async changeAccountDetails(accountDetailDto: AccountDetailDto) {
-
-
   const user = await this.usersService.findUserByUsername(
     accountDetailDto.username,
   )
