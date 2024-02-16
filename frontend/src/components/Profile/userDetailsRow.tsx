@@ -56,8 +56,6 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
             }
         }
         const token = localStorage.getItem("access_token");
-        console.log("TOKENN", token);
-        console.log("USERNAME", username);
 
         setUpdateField(!updateField);
 

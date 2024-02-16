@@ -93,18 +93,12 @@ export class AuthController {
       body.token,
       );
   }
+
+  @UseGuards(AuthGuard)
+  @Post('delete-user')
+  deleteUser(@Request() req) {
+    return this.authService.deleteUser(req.user.sub)
+
+  }
+
 }
-
-
-// }
-
-
-  // @Post('logout')
-  // logout(@Res() res: Response): void {
-  //   const success = this.authService.logout();
-  //   if (success) {
-  //    res.status(HttpStatus.OK).json({});
-  //   } else {
-  //   res.sendStatus(HttpStatus.BAD_REQUEST)
-  //   }
-  // }
