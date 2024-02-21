@@ -57,7 +57,7 @@ const Projects = () => {
                     </Box>
                 );
         })}
-        <CreateProjectAccordion projects={projects} setProjects={setProjects}/>
+        <CreateProjectAccordion projects={projects} setProjects={setProjects} />
 
 
         </Box>

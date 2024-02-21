@@ -2,6 +2,7 @@ import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { Project } from "../../Pages/Project"
+import axios from "axios";
 
 
 
@@ -18,6 +19,7 @@ const CreateProjectAccordion = ({projects, setProjects}: Props) => {
     const [name, setName] = useState("");
     const[description, setDescription] = useState("");
     const [submitClickedName, setSubmitClickedName] = useState(false);
+    const[isOpen, setIsOpen] = useState(false);
 
     const isErrorName = name === "" && submitClickedName;
 
@@ -35,9 +37,22 @@ const CreateProjectAccordion = ({projects, setProjects}: Props) => {
     const onSubmit = () => {
         setSubmitClickedName(true)
 
-        console.log("NAME", name);
-        console.log("DESCRIPTION", description);
-        setProjects([...projects, {
+
+        if (name !== "") {
+          const token = localStorage.getItem("access_token")
+          axios.post('http://localhost:3030/auth/create-project',
+          {
+            name,
+            description,
+
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+          ).then((response) => {
+            console.log("RESPONSE", response.data)
+          })
+
+          setIsOpen(false);
+          setProjects([...projects, {
             name,
             description,
             status: "to do",
@@ -46,16 +61,21 @@ const CreateProjectAccordion = ({projects, setProjects}: Props) => {
         setName('');
         setDescription("");
         setSubmitClickedName(false);
+
+        }
+
+
+
     }
 
 
     return (
-        <Accordion allowMultiple>
+        <Accordion allowToggle index={isOpen ? 0 : 1}>
         <AccordionItem border="1px solid">
           {({ isExpanded }) => (
             <>
               <h2>
-                <AccordionButton  h="58px" >
+                <AccordionButton onClick={()=> setIsOpen(!isOpen)} h="58px" >
                 {isExpanded ? (
                     <MinusIcon fontSize='12px' />
                   ) : (

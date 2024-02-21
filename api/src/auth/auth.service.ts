@@ -3,14 +3,16 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
-import { AccountDetailDto } from './auth.controller';
+import { AccountDetailDto, ProjectDto } from './auth.controller';
 import { User } from 'src/entities/user.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { MailService } from 'src/mail/mail.service';
+import { ProjectService } from 'src/projects/project.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private projectService: ProjectService,
     private usersService: UsersService,
     private mailService: MailService,
     private jwtService: JwtService,
@@ -131,6 +133,10 @@ export class AuthService {
 
  async deleteUser(id: number) {
   return await this.usersService.deleteUser(id);
+ }
+
+ async createProject(name: string, description: string, userId: number ){
+  return await this.projectService.createProject(name, description, userId);
  }
 
 
