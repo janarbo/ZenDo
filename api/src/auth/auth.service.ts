@@ -3,17 +3,36 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
+import { AccountDetailDto } from './auth.controller';
+import { User } from 'src/entities/user.entity';
+import { MailModule } from 'src/mail/mail.module';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private mailService: MailService,
     private jwtService: JwtService,
+
   ) {}
 
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
   }
+
+  async createAccessToken(user: User, secret?:string) {
+    const payload = { sub:user.id}
+    if (secret) {
+      return await this.jwtService.signAsync(payload,
+        {secret: user.password,
+          expiresIn: "10m",
+        });
+    } else {
+      return await this.jwtService.signAsync(payload);
+    }
+  }
+
 
   async signIn(username: string, password: string) {
   const user = await this.usersService.findUserByUsername(username);
@@ -27,9 +46,11 @@ export class AuthService {
     access_token: await this.jwtService.signAsync(payload),
    };
   } else {
-    console.log('user does not exist');
-   }
+    throw new UnauthorizedException('Invalid credentials');
   }
+}
+
+
 
   async signUp(createUserDto: CreateUserDto): Promise<{ access_token: string }> {
     const hashedPassword = await this.hashPassword(createUserDto.password);
@@ -52,5 +73,66 @@ export class AuthService {
 
     return { access_token: accessToken };
   }
+
+  async getProfileData(id: number) {
+
+    const user = await this.usersService.findUserByUserID(id);
+    return {
+      email: user.email,
+      name: user.name,
+      username: user.username,
+    }
+  }
+
+  async sendResetPasswordEmail(email) {
+    const user = await this.usersService.findUserByEmail(email);
+    if (user == null) {
+      throw new UnauthorizedException('email does not exist');
+    }
+    const token = await this.createAccessToken(user, user.password);
+    return await this.mailService.sendPasswordResetEmail(user, token);
+
+
+  }
+
+  async saveNewPassword(newPassword: string, id: number, token: string) {
+    const user = await this.usersService.findUserByUserID(id)
+    await this.jwtService.verifyAsync(token, {
+      secret: user.password,
+    }).catch((error)=>{
+      console.log("ERROR", error);
+      throw new UnauthorizedException;
+    }).then(async ()=> {
+      const hashedPassword = await this.hashPassword(newPassword);
+      user.password = hashedPassword;
+      return await this.usersService.create(user);
+    });
+  }
+
+ async changeAccountDetails(accountDetailDto: AccountDetailDto) {
+  const user = await this.usersService.findUserByUsername(
+    accountDetailDto.username,
+  )
+
+  if (accountDetailDto.field === 'password') {
+    const plainTextPassword = accountDetailDto.value;
+    const hashedPassword = await this.hashPassword(plainTextPassword);
+    user[accountDetailDto.field] = hashedPassword;
+  } else {
+    user[accountDetailDto.field] = accountDetailDto.value;
+  }
+  const updatedUser = await this.usersService.create(user);
+  return {
+    name: updatedUser.name,
+    email: updatedUser.email,
+    username: updatedUser.username,
+  };
+ }
+
+ async deleteUser(id: number) {
+  return await this.usersService.deleteUser(id);
+ }
+
+
 
 }

@@ -1,53 +1,39 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Input } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import {  ChakraProvider } from '@chakra-ui/react'
+import {Outlet, useLoaderData} from 'react-router-dom'
+import Header from './components/Header';
 
-import { Box, Button, ChakraProvider, Flex, Text } from '@chakra-ui/react'
+type Data = {
+  email: string;
+  name: string;
+  username: string;
+}
 
-type NameObject = {
-  name:string;
-};
+export type Context = {
+  loggedIn : boolean;
+  toggleLoggedIn:() => void;
+}
 
 function App() {
-  const[names, setNames] = useState ([]);
-  const[inputName, setInputName] = useState();
+  const data = useLoaderData() as Data || undefined;
+  const [loggedIn, setLoggedIn] = useState(data?.username !== undefined);
 
-  useEffect( () => {
-     axios.get('http://localhost:3030/names').then((response) => {
-     setNames(response.data);
-    });
-  },[]);
-
-  const handleChange = (e:any) => {
-    setInputName(e.target.value);
-
-
+  const toggleLoggedIn = () => {
+    setLoggedIn(!loggedIn);
   }
 
-  const handleClick = async() => {
-    const response = await axios.post('http://localhost:3030/name',
-    {name: inputName,
-  });
-    console.log('RESPONSE', response)
+  const context: Context = {
+    loggedIn,
+    toggleLoggedIn,
   }
+
 
   return (
-      <>
-      <Flex gap={4}  m={20}>
-      <Input placeholder='Type your name...' onChange={handleChange} />
-        <Button onClick={handleClick}>
-          BUTTON
-          </Button>
-      </Flex>
-      <Box>All Names</Box>
-      {
-        names.map((name: NameObject) =>{
-            return<Text>{name?.name}</Text>;
-      })}
-      </>
-
-  )
-
+    <ChakraProvider>
+      <Header loggedIn={loggedIn}/>
+      <Outlet context={context}/>
+    </ChakraProvider>
+  );
 }
 
 export default App;
