@@ -32,6 +32,7 @@ const Profile = () => {
             status: 'success',
             duration: 3000,
             isClosable: true,
+            variant: "subtle",
           });
     }
 
@@ -57,6 +58,7 @@ const Profile = () => {
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
+                variant: "subtle",
               });
         }).catch((error) => {
             toast({
@@ -65,6 +67,7 @@ const Profile = () => {
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
+                variant: "subtle",
               });
 
         })
@@ -95,10 +98,7 @@ const Profile = () => {
         <Box display='flex' gap={4} justifyContent='center'>
              <Button onClick={logOut}>Log out</Button>
              <Button onClick={deleteAccount}> Delete Accout</Button>
-
         </Box>
-
-
     </Box>
         );
 }

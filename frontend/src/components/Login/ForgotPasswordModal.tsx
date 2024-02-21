@@ -10,6 +10,7 @@ type Props = {
 }
 
 const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
+    const [errorMessage, setErrorMessage] =useState('')
     const[email, setEmail] = useState('')
     const toast = useToast();
 
@@ -21,13 +22,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
 
         const invalidEmail = isInvalidEmail(email);
         if (invalidEmail) {
-            toast({
-                title: 'ERROR',
-                description: 'Please enter a valid email!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-              });
+            setErrorMessage('Please enter a valid email.')
             } else {
             axios.post('http://localhost:3030/auth/reset-password', {
                 email,
@@ -41,18 +36,14 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
                   status: 'success',
                   duration: 3000,
                   isClosable: true,
+                  variant: "subtle",
                 });
+                onClose();
                })
                .catch((error)=> {
                 if (error.response.data.message === "email does not exist")
                 {
-                  toast({
-                    title: 'Success',
-                    description: "Check your email account for further direction",
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: true,
-                  });
+                  setErrorMessage('Email does not exist')
                 } else{
                   toast({
                     title: 'ERROR',
@@ -60,13 +51,12 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
+                    variant: "subtle",
                   });
 
                 }
 
                });}
-
-        onClose();
     }
 
     return (
@@ -79,7 +69,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
           <Box>
             <Text mb={4}>Enter the email address associated with your account:</Text>
             <Input type={'text'} onChange={saveEmail}/>
-
+            {errorMessage && <Text color='red'>{errorMessage}</Text>}
             </Box>
           </ModalBody>
             <Button mx={6} mb={5} mt={2} bgColor='#E6E6FA'  onClick={submitEmail}>

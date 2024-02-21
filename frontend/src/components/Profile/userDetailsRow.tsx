@@ -39,6 +39,7 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
+                    variant: "subtle",
                   });
                 return;
             }
@@ -50,6 +51,7 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
+                    variant: "subtle",
                 });
                 return;
 
@@ -73,6 +75,7 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
+                variant: "subtle",
               });
          })
          .catch((error) => {

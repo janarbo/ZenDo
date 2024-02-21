@@ -96,9 +96,6 @@ export class AuthService {
   }
 
   async saveNewPassword(newPassword: string, id: number, token: string) {
-    console.log("NEW PASSWORD", newPassword)
-    console.log("ID", id)
-    console.log("TOKEN", token)
     const user = await this.usersService.findUserByUserID(id)
     await this.jwtService.verifyAsync(token, {
       secret: user.password,

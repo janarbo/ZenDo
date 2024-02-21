@@ -1,12 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
-import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast} from '@chakra-ui/react'
+import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast, IconButton} from '@chakra-ui/react'
 import axios from 'axios';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Context } from '../App';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 
 export const isInvalidEmail = (email:string) => {
+
   const emailFormat =  /\S+@\S+\.\S+/;
   if (email.match(emailFormat) && email.length > 0) {
     return false;
@@ -24,6 +26,12 @@ const isInvalidPass2 = (pass1: string, pass2: string) => {
 }
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleSecondPasswordVisibility = () => setShowSecondPassword(!showSecondPassword);
+
   const navigate = useNavigate();
   const toast = useToast();
   const context = useOutletContext() as Context;
@@ -114,7 +122,7 @@ const SignUp = () => {
         setSubmitClickedPassword(false);
         setSubmitClickedSecondPassword(false);
 
-        navigate('/projects');
+        navigate('/profile');
 
         toast({
           title: 'Account created.',
@@ -122,6 +130,7 @@ const SignUp = () => {
           status: 'success',
           duration: 3000,
           isClosable: true,
+          variant: "subtle",
         });
       })
       .catch((error) => {
@@ -144,7 +153,7 @@ const SignUp = () => {
           // or add message: "We are not able to create your account, please try again!"
           status: 'error',
           duration: 3000,
-          isClosable: true,
+          variant: "subtle",
         });
 
       })
@@ -155,7 +164,7 @@ const SignUp = () => {
 
 
   return (
-     <Box>
+     <Box mb="100px">
       <Text textAlign='center' mt={20} mb={4} fontSize={20}>Create an Account </Text>
       <Box
         maxW='75%'
@@ -191,21 +200,47 @@ const SignUp = () => {
 
         <FormControl isInvalid={isErrorPassword} isRequired>
             <FormLabel>Password</FormLabel>
-            <Input type='password' value={password} onChange={onChangePassword} />
-            {!isErrorPassword ? null: (
-              <FormErrorMessage>Password is required.</FormErrorMessage>
-            )}
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={onChangePassword}
+              pr="10rem"/>
+              {!isErrorPassword ? null: (
+                <FormErrorMessage>Password is required.</FormErrorMessage>
+              )}
+            <IconButton
+              aria-label={showPassword ? 'Hide password' : 'Show password'} // Accessibility label
+              icon={showPassword ? <ViewOffIcon /> : <ViewIcon />} // Icon to show based on password visibility state
+              onClick={togglePasswordVisibility} // Toggle password visibility on click
+              position="absolute"
+              right="0rem"
+              top="75%"
+              transform="translateY(-50%)"
+              bg="transparent"
+              _hover={{ bg: 'transparent' }}
+            />
         </FormControl>
 
         <FormControl isInvalid={isErrorSecondPassword} isRequired>
             <FormLabel>Re-enter Password</FormLabel>
-            <Input type='password' value={secondPassword} onChange={onChangeSecondPassword} />
+            <Input type={showSecondPassword ? 'text' : 'password'} value={secondPassword} onChange={onChangeSecondPassword} />
+            <IconButton
+              aria-label={showSecondPassword ? 'Hide password' : 'Show password'} // Accessibility label
+              icon={showSecondPassword ? <ViewOffIcon /> : <ViewIcon />} // Icon to show based on password visibility state
+              onClick={toggleSecondPasswordVisibility} // Toggle password visibility on click
+              position="absolute"
+              right="0rem"
+              top="75%"
+              transform="translateY(-50%)"
+              bg="transparent"
+              _hover={{ bg: 'transparent' }}
+            />
             {!isErrorSecondPassword ? null: (
               <FormErrorMessage>Password must match.</FormErrorMessage>
             )}
         </FormControl>
 
-        <Button w="100%" onClick={onSubmit}>Submit</Button>
+        <Button w="100%" bgColor='#E6E6FA' onClick={onSubmit}>Submit</Button>
       </Box>
      </Box>
   );

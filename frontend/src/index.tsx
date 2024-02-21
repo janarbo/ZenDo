@@ -58,7 +58,6 @@ const router = createBrowserRouter([
         element: <Profile/>,
         loader: async() => {
           const token = localStorage.getItem("access_token");
-          console.log("TOKEN", token)
           if (token){
             try {
               const response = await axios.get("http://localhost:3030/auth/profile",

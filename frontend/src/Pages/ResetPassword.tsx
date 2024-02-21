@@ -29,10 +29,6 @@ const ResetPassword = () => {
     }
 
     const onSubmit = () => {
-        console.log('Password', password)
-        console.log("Second Pass", secondPassword)
-        // setPassword('');
-        // setSecondPassword('');
 
         setSubmitPassword(true);
         setSubmitSecondPassword(true);
@@ -53,6 +49,7 @@ const ResetPassword = () => {
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
+                variant: "subtle",
               });
 
 
@@ -63,6 +60,7 @@ const ResetPassword = () => {
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
+                variant: "subtle",
               });
         })
     }

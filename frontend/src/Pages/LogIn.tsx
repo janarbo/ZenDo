@@ -1,11 +1,14 @@
-import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure } from '@chakra-ui/react';
+import { Box, Input, Text, Button, FormControl, FormLabel, FormErrorMessage, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, IconButton } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Context } from '../App';
 import ForgotPasswordModal from '../components/Login/ForgotPasswordModal';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 const LogIn = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const navigate = useNavigate()
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -68,13 +71,15 @@ const LogIn = () => {
       setSubmitClickedUsername(false);
       setSubmitClickedPassword(false);
 
-      navigate("/projects");
+      navigate("/profile");
       toast({
         title: 'Login Successful',
         description: `Welcome back, ${username}`,
         status: 'success',
         duration: 3000,
         isClosable: true,
+        variant: "subtle", // or "solid" for a solid background
+
       });
 
     }). catch((error) => {
@@ -91,10 +96,11 @@ const LogIn = () => {
 
         toast({
           title: 'Login Failed',
-          description: "There was an error loggingg you into your account. Please try again!",
+          description: "There was an error logging you into your account. Please try again!",
           status: 'error',
           duration: 3000,
           isClosable: true,
+          variant: "subtle",
         });
 
        if (error.response && error.response.status === 401) {
@@ -127,20 +133,27 @@ const LogIn = () => {
 
         <FormControl isInvalid={isErrorPassword} isRequired>
             <FormLabel>Password</FormLabel>
-            <Input type='password' value={password} onChange={onChangePassword} />
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={onChangePassword}
+            />
+            <IconButton
+            aria-label={showPassword ? 'Hide password' : 'Show password'} // Accessibility label
+            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />} // Icon to show based on password visibility state
+            onClick={togglePasswordVisibility} // Toggle password visibility on click
+            position="absolute"
+            right="1rem"
+            top="75%"
+            transform="translateY(-50%)"
+            bg="transparent"
+            _hover={{ bg: 'transparent' }}
+          />
             {!isErrorPassword ? null: (
               <FormErrorMessage>Password is required.</FormErrorMessage>
             )}
         </FormControl>
         <Button bgColor='#E6E6FA' w="100%"  type='submit' onClick={handleSubmit} mt={2}>Submit</Button>
-
-        {/* <FormControl >
-            <FormLabel>Enter your email:</FormLabel>
-            <Input type='text' value={email} onChange={onChangeEmail} />
-            </FormControl> */}
-
-
-
         </Box>
         <Box display='flex' gap={10} justifyContent='center' mt={6}>
           <Text lineHeight='40px' fontSize='14px'>Forgot your password?</Text>
@@ -154,14 +167,3 @@ const LogIn = () => {
 };
 
 export default LogIn;
-
-
-  // const onSubmiEmail = () => {
-  //   axios.post('http://localhost:3030/auth/reset-password', {
-  //   email,
-  //   })
-  //   .then ((response) => {
-
-  //   })
-  // }
-   {/* <Button onClick={onSubmiEmail}>Submit</Button> */}

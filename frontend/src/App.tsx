@@ -21,7 +21,6 @@ function App() {
   const toggleLoggedIn = () => {
     setLoggedIn(!loggedIn);
   }
-  console.log("toggleLoggedin", toggleLoggedIn)
 
   const context: Context = {
     loggedIn,
