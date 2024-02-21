@@ -101,4 +101,10 @@ export class AuthController {
 
   }
 
+  @UseGuards(AuthGuard)
+  @Get('user-project')
+  getUserProjects(@Request() req) {
+    return this.authService.getProjectData(req.user.username)
+  }
+
 }
