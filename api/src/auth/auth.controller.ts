@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe, Res} from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe, Res, Param} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -120,6 +120,15 @@ export class AuthController {
   @Get('user-projects')
   getUserProjects(@Request() req) {
      return this.authService.getUserProjects(req.user.sub);
+
+  }
+
+
+  @UseGuards(AuthGuard)
+  @Get('project/:id')
+  getProject(@Param('id') id: number, @Request() req) {
+     console.log("params", id);
+     return this.authService.getProject(req.user.sub, id)
 
   }
 

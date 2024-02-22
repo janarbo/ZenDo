@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { ProjectDto } from 'src/auth/auth.controller';
 
 @Injectable()
-export class ProjectService {
+export class ProjectsService {
     constructor(
         @InjectRepository(Project)
         private projectsRepository: Repository<Project>

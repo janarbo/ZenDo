@@ -7,12 +7,12 @@ import { AccountDetailDto, ProjectDto } from './auth.controller';
 import { User } from 'src/entities/user.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { MailService } from 'src/mail/mail.service';
-import { ProjectService } from 'src/projects/project.service';
+import { ProjectsService } from 'src/projects/project.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private projectService: ProjectService,
+    private projectsService: ProjectsService,
     private usersService: UsersService,
     private mailService: MailService,
     private jwtService: JwtService,
@@ -136,17 +136,22 @@ export class AuthService {
  }
 
  async createProject(name: string, description: string, userId: number ){
-  return await this.projectService.createProject(name, description, userId);
+  return await this.projectsService.createProject(name, description, userId);
  }
 
  async getUserProjects(userId: number) {
    const user = await this.getProfileData(userId);
-   const projects = await this.projectService.getUserProjects(userId);
+   const projects = await this.projectsService.getUserProjects(userId);
 
    return {
     user,
     projects,
    };
+ }
+
+ async getProject(userId: number, id: number) {
+  const projects = await this.projectsService.getUserProjects(userId)
+  return projects.filter((project) => project.id === id);
  }
 
 
