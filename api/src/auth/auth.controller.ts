@@ -119,7 +119,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('user-projects')
   getUserProjects(@Request() req) {
-    return this.authService.getProfileData(req.user.sub)
+     return this.authService.getUserProjects(req.user.sub);
+
   }
 
   @UseGuards(AuthGuard)

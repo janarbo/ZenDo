@@ -14,39 +14,24 @@ export type Project = {
 
 };
 
-const fakeProjects: Project[] = [
-    {name: 'Projects A',
-     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-     status: "To do",
-
-    },
-    {name: 'Projects B',
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    status: "To do",
-   },
-   {name: 'Projects C',
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    status: "To do",
-   },
-   {name: 'Projects D',
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    status: "To do",
-   },
-   {name: 'Projects E',
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    status: "Done",
-   }
-]
+type LoaderData = {
+    user: Data;
+    projects: Project[];
+}
 
 
 
 const Projects = () => {
-    const data = useLoaderData() as Data;
-    const [projects, setProjects] = useState(fakeProjects);
+    const data = useLoaderData() as LoaderData;
+    console.log("Projects data:", data.projects);
+
+    const user = data.user as Data;
+
+    const [projects, setProjects] = useState(data.projects);
 
     return (
         <Box>
-        <Text textAlign='center' mt={20} mb={4} fontSize={20}> {data.name}'s Projects</Text>
+        <Text textAlign='center' mt={20} mb={4} fontSize={20}> {user.name}'s Projects</Text>
         <Box m={10}>
         {projects.map((project) => {
                 return (
@@ -61,8 +46,6 @@ const Projects = () => {
 
 
         </Box>
-
-
         </Box>
     )
 };

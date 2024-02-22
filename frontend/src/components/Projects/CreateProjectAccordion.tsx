@@ -17,9 +17,9 @@ type Props = {
 const CreateProjectAccordion = ({projects, setProjects}: Props) => {
 
     const [name, setName] = useState("");
-    const[description, setDescription] = useState("");
+    const [description, setDescription] = useState("");
     const [submitClickedName, setSubmitClickedName] = useState(false);
-    const[isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const isErrorName = name === "" && submitClickedName;
 
@@ -39,28 +39,35 @@ const CreateProjectAccordion = ({projects, setProjects}: Props) => {
 
 
         if (name !== "") {
+          setIsOpen(false);
           const token = localStorage.getItem("access_token")
           axios.post('http://localhost:3030/auth/create-project',
           {
             name,
             description,
-
           },
           { headers: { Authorization: `Bearer ${token}` } }
           ).then((response) => {
-            console.log("RESPONSE", response.data)
+            console.log("RESPONSE", response.data);
+            // Merge the newly created project with the existing projects
+            setProjects(([...projects, response.data]));
+            setName("");
+            setDescription("");
+            setSubmitClickedName(false);
+
+            toast({
+              title: 'Success',
+              description: `Your project has been created!`,
+              status: 'success',
+              duration: 3000,
+              isClosable: true,
+              variant: "subtle", // or "solid" for a solid background
+
+            });
           })
-
-          setIsOpen(false);
-          setProjects([...projects, {
-            name,
-            description,
-            status: "to do",
-        }])
-
-        setName('');
-        setDescription("");
-        setSubmitClickedName(false);
+          .catch((error) => {
+            console.log("ERROR", error);
+          })
 
         }
 
@@ -112,3 +119,6 @@ const CreateProjectAccordion = ({projects, setProjects}: Props) => {
 }
 
 export default CreateProjectAccordion;
+function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; variant: string; }) {
+  throw new Error("Function not implemented.");
+}
