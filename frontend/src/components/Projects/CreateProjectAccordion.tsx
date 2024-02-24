@@ -24,6 +24,8 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
   const isErrorName = name === "" && submitClickedName;
 
   const onChangeName = (e: any) => {
+    console.log('onChangeName function called'); // Add this line
+
     setSubmitClickedName(false)
 
     setName(e.target.value);
@@ -36,6 +38,7 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
 
   const onSubmit = () => {
     setSubmitClickedName(true)
+    console.log("NAME", name)
 
 
     if (name !== "") {
@@ -104,7 +107,7 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
                 <FormLabel>Description</FormLabel>
                 <Textarea value={description} onChange={onChangeDescription} />
                 {!isErrorName ? null : (
-                  <FormErrorMessage>Username is required.</FormErrorMessage>
+                  <FormErrorMessage>Description is required.</FormErrorMessage>
                 )}
               </FormControl>
               <Button w="100%" onClick={onSubmit}>Create Project</Button>
