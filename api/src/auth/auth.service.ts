@@ -8,10 +8,12 @@ import { User } from 'src/entities/user.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { MailService } from 'src/mail/mail.service';
 import { ProjectsService } from 'src/projects/project.service';
+import { FeaturesService } from 'src/features/feature.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private featuresService: FeaturesService,
     private projectsService: ProjectsService,
     private usersService: UsersService,
     private mailService: MailService,
@@ -135,7 +137,7 @@ export class AuthService {
   return await this.usersService.deleteUser(id);
  }
 
- async createProject(name: string, description: string, userId: number ){
+ async createProject(name: string, description: string, userId: number){
   return await this.projectsService.createProject(name, description, userId);
  }
 
@@ -154,11 +156,26 @@ export class AuthService {
   return projects.filter((project) => project.id === id);
  }
 
- async createFeature(name: string, description: string, userId: number ){
-  //return await this.projectsService.createFeature(name, description, userId);
+ async createFeature(name: string, description: string, projectId: number, userId: number ){
   console.log("Name", name)
   console.log("Description", description)
-  console.log("USERID", userId)
+  console.log("PROJECTID", projectId)
+  console.log("UserId", userId)
+  const projects = await this.projectsService.getUserProjects(userId);
+  const project = projects.find((project) => project.id === projectId);
+
+  if(project.id) {
+    return await this.featuresService.createFeature(
+      name,
+      description,
+      projectId,
+    );
+
+  } else {
+    throw new UnauthorizedException("project not found")
+  }
+
+
  }
 
 

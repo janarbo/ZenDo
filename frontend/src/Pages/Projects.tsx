@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { Data } from "./Profile";
 import CreateProjectAccordion from "../components/Projects/CreateProjectAccordion";
+import { Feature } from "./Project";
 
 
 
@@ -12,6 +13,7 @@ export type Project = {
     name: string;
     description?: string;
     status: string;
+    features: Feature[];
 
 };
 

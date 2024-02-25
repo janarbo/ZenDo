@@ -46,8 +46,7 @@ const LogIn = () => {
 
 
   const handleSubmit = () =>{
-    console.log("USERNAME", username);
-    console.log("PASSWORD", password);
+   
     setSubmitClickedUsername(true);
     setSubmitClickedPassword(true);
 

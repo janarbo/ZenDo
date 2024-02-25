@@ -3,6 +3,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import React, { useState } from "react"
 import axios from "axios";
 import { Feature } from "../../Pages/Project";
+import { useLoaderData } from "react-router-dom";
 
 
 
@@ -10,11 +11,13 @@ import { Feature } from "../../Pages/Project";
 type Props = {
     features: Feature[];
     setFeatures: React.Dispatch<React.SetStateAction<Feature[]>>;
+    projectId: number;
+
 }
 
 
 
-const CreateFeatureAccordion = ({ features, setFeatures }: Props) => {
+const CreateFeatureAccordion = ({ features, setFeatures, projectId }: Props) => {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -27,7 +30,6 @@ const CreateFeatureAccordion = ({ features, setFeatures }: Props) => {
         setSubmitClickedName(false)
 
         setName(e.target.value);
-        console.log('Name changed:', e.target.value);
     }
 
     const onChangeDescription = (e: any) => {
@@ -42,16 +44,16 @@ const CreateFeatureAccordion = ({ features, setFeatures }: Props) => {
             setIsOpen(false);
 
             const token = localStorage.getItem("access_token")
-            console.log("NAME", name)
-            console.log("DESCRIPTION", description)
-
-
+            const userId = localStorage.getItem('id');
 
 
             axios.post('http://localhost:3030/auth/create-feature',
                 {
                     name,
                     description,
+                    projectId,
+                    userId: Number(userId)
+
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
@@ -59,7 +61,7 @@ const CreateFeatureAccordion = ({ features, setFeatures }: Props) => {
                 setName("");
                 setDescription("");
                 setSubmitClickedName(false);
-                console.log("Feature created successfully:", response.data);
+
 
                 toast({
                     title: 'Success',

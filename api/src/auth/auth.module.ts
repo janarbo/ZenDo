@@ -6,10 +6,12 @@ import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 import { MailModule } from 'src/mail/mail.module';
 import { ProjectsModule } from 'src/projects/project.module';
+import { FeaturesModule } from 'src/features/feature.module';
 
 
 @Module({
   imports: [
+    FeaturesModule,
     ProjectsModule,
     MailModule,
     UsersModule,
