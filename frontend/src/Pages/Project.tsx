@@ -1,8 +1,9 @@
-import { Box, Text } from "@chakra-ui/react"
+import { Box, Text, useDisclosure } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useLoaderData, useParams } from "react-router-dom"
 import { Project as ProjectType } from "./Projects";
-import CreateFeatureAccordion from "../components/Projects/CreateFeatureAccordion";
+import CreateFeatureAccordion from "../components/Features/CreateFeatureAccordion";
+import FeatureModal from "../components/Features/FeatureModal";
 
 
 export type Feature = {
@@ -10,6 +11,7 @@ export type Feature = {
     status: "To Do" | "In Progress" | "Done!",
     userStoryCount: number;
     completedUserStories: number;
+    description?: string;
 }
 
 const columns = [
@@ -24,38 +26,6 @@ const columns = [
     },
 ]
 
-const sampleFeatures: Feature[] = [
-    {
-        name: "Feature A",
-        status: "To Do",
-        userStoryCount: 10,
-        completedUserStories: 0,
-    },
-    {
-        name: "Feature B",
-        status: "Done!",
-        userStoryCount: 15,
-        completedUserStories: 15,
-    },
-    {
-        name: "Feature C",
-        status: "To Do",
-        userStoryCount: 3,
-        completedUserStories: 0,
-    },
-    {
-        name: "Feature D",
-        status: "In Progress",
-        userStoryCount: 10,
-        completedUserStories: 5,
-    },
-    {
-        name: "Feature E",
-        status: "To Do",
-        userStoryCount: 10,
-        completedUserStories: 0,
-    },
-]
 
 const Project = () => {
 
@@ -63,7 +33,9 @@ const Project = () => {
     const data = useLoaderData() as ProjectType[];
     const project = data[0];
     const [features, setFeatures] = useState(project.features)
-    console.log("PROJECT", project)
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [selectedFeature, setSelectedFeature]= useState<Feature>(features[0])
+
 
 
 
@@ -93,6 +65,8 @@ const Project = () => {
                                             m={4}
                                             display="flex"
                                             justifyContent="space-between"
+                                            onClick={onOpen}
+                                            _hover={{ cursor: "pointer"}}
                                         >
                                             <Text>{feature.name}</Text>
                                             <Text>{feature.completedUserStories}/{feature.userStoryCount}</Text>
@@ -119,6 +93,11 @@ const Project = () => {
                 })}
 
             </Box>
+            <FeatureModal
+            isOpen={isOpen}
+            onClose={onClose}
+            featureName={selectedFeature.name}
+            featureDescription={selectedFeature.description || "There is no description..."}/>
         </Box>
     )
 }
