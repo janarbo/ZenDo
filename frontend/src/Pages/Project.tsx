@@ -1,6 +1,6 @@
 import { Box, Text, useDisclosure } from "@chakra-ui/react"
-import React, { useContext, useEffect, useState } from "react"
-import { useLoaderData, useParams } from "react-router-dom"
+import React, { useState } from "react"
+import { useLoaderData} from "react-router-dom"
 import { Project as ProjectType } from "./Projects";
 import CreateFeatureAccordion from "../components/Features/CreateFeatureAccordion";
 import FeatureModal from "../components/Features/FeatureModal";
@@ -12,6 +12,7 @@ export type Feature = {
     userStoryCount: number;
     completedUserStories: number;
     description?: string;
+    id: number;
 }
 
 const columns = [
@@ -65,7 +66,10 @@ const Project = () => {
                                             m={4}
                                             display="flex"
                                             justifyContent="space-between"
-                                            onClick={onOpen}
+                                            onClick={() => {
+                                               onOpen();
+                                               setSelectedFeature(feature);
+                                            }}
                                             _hover={{ cursor: "pointer"}}
                                         >
                                             <Text>{feature.name}</Text>
@@ -83,8 +87,6 @@ const Project = () => {
                                             features={features}
                                             setFeatures={setFeatures}
                                             projectId={project.id}
-
-
                                         />)
                                 }
                             </Box>
@@ -97,7 +99,8 @@ const Project = () => {
             isOpen={isOpen}
             onClose={onClose}
             featureName={selectedFeature.name}
-            featureDescription={selectedFeature.description || "There is no description..."}/>
+            featureDescription={selectedFeature.description || "There is no description..."}
+            featureId={selectedFeature.id}/>
         </Box>
     )
 }

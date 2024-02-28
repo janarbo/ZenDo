@@ -45,12 +45,12 @@ const Projects = () => {
         {projects.map((project) => {
                 return (
                     <Box
-                    display="flex"
-                    border="1px solid"
-                    p={5}
-                    mb={6}
-                    onClick={() => {goToProject(project.id)}}
-                    _hover={{cursor: "pointer", backgroundColor: "#E6E6FA"}}
+                        display="flex"
+                        border="1px solid"
+                        p={5}
+                        mb={6}
+                        onClick={() => {goToProject(project.id)}}
+                        _hover={{cursor: "pointer", backgroundColor: "#E6E6FA"}}
                     >
                         <Text w="15%">{project.name}</Text>
                         <Text  noOfLines={1} flex={1}>{project.description}</Text>

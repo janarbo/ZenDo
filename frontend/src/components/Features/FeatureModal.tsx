@@ -1,6 +1,7 @@
 import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import UserStoryDetailsAccordion from "../UserStory/UserStoryDetailsAccordion";
+import CreateUserStoryAccordion from "../UserStory/CreateUserStoryAccordion";
 
 
 type Props = {
@@ -8,6 +9,12 @@ type Props = {
     onClose: () => void;
     featureName: string;
     featureDescription: string;
+    featureId: number;
+}
+export type UserStory = {
+    name: string;
+    description: string;
+    status: string;
 }
 
 const sampleUserStories = [
@@ -35,9 +42,9 @@ const sampleUserStories = [
 ];
 
 
-const FeatureModal = ({ isOpen, onClose, featureName, featureDescription }: Props) => {
+const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featureId }: Props) => {
 
-
+    const [userStories, setUserStories] = useState(sampleUserStories)
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered  >
             <ModalOverlay />
@@ -46,10 +53,10 @@ const FeatureModal = ({ isOpen, onClose, featureName, featureDescription }: Prop
                 <Box m={10}>
                     <Box mb={20}>
                         <Text mb={4} fontSize={18}>
-                            Feature Name
+                            {featureName}
                         </Text>
                         <Text fontSize={15}>
-                            Description of feature
+                            {featureDescription}
                         </Text>
                     </Box>
                     <ModalCloseButton />
@@ -63,6 +70,12 @@ const FeatureModal = ({ isOpen, onClose, featureName, featureDescription }: Prop
                                 />
                         );
                     })}
+                       <CreateUserStoryAccordion
+                        userStories={userStories}
+                        setUserStories={setUserStories}
+                        featureId={featureId}
+                    />
+
                     </Box>
 
                 </Box>

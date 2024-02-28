@@ -71,6 +71,18 @@ export class FeatureDto {
   userId: number;
 }
 
+export class UserStoryDto {
+  @IsNotEmpty()
+  @Transform((params) => sanitizeHtml(params.value))
+  name: string;
+
+  @IsOptional()
+  @Transform((params) => sanitizeHtml(params.value))
+  description: string;
+
+  @IsNotEmpty()
+  featureId: number;
+}
 
 
 @Controller('auth')
@@ -161,6 +173,13 @@ export class AuthController {
       featureDto.description,
       featureDto.projectId,
       req.user.sub)
+  }
+
+
+  @UseGuards(AuthGuard)
+  @Post('create-user-story')
+  createUserStory(@Body() userStoryDto: UserStoryDto, @Request() req) {
+     console.log("USER STORY", userStoryDto, req.user.sub)
   }
 
 }
