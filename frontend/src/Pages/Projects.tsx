@@ -27,7 +27,7 @@ type LoaderData = {
 const Projects = () => {
     const navigate = useNavigate();
     const data = useLoaderData() as LoaderData;
-    console.log("Projects data:", data.projects);
+
 
     const user = data.user as Data;
 

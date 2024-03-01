@@ -1,19 +1,24 @@
-import { Box, Text, useDisclosure } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { useLoaderData} from "react-router-dom"
+import { Box, Text, useDisclosure, useToast } from "@chakra-ui/react"
+import React, { useEffect, useState, } from "react"
+import { useLoaderData } from "react-router-dom"
 import { Project as ProjectType } from "./Projects";
 import CreateFeatureAccordion from "../components/Features/CreateFeatureAccordion";
-import FeatureModal from "../components/Features/FeatureModal";
+import FeatureModal, { UserStory } from "../components/Features/FeatureModal";
+import { Data } from "./Profile";
 
 
 export type Feature = {
-    name: string,
-    status: "To Do" | "In Progress" | "Done!",
+
+    name: string;
+    status: "To Do" | "In Progress" | "Done!";
     userStoryCount: number;
     completedUserStories: number;
     description?: string;
     id: number;
+    userStories: UserStory[];
+
 }
+
 
 const columns = [
     {
@@ -28,15 +33,16 @@ const columns = [
 ]
 
 
+
 const Project = () => {
 
 
     const data = useLoaderData() as ProjectType[];
     const project = data[0];
-    const [features, setFeatures] = useState(project.features)
+    const [features, setFeatures] = useState<Feature[]>(project.features)
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [selectedFeature, setSelectedFeature]= useState<Feature>(features[0])
-
+    const [selectedFeature, setSelectedFeature] = useState(features[0])
+ 
 
 
 
@@ -67,10 +73,10 @@ const Project = () => {
                                             display="flex"
                                             justifyContent="space-between"
                                             onClick={() => {
-                                               onOpen();
-                                               setSelectedFeature(feature);
+                                                onOpen();
+                                                setSelectedFeature(feature);
                                             }}
-                                            _hover={{ cursor: "pointer"}}
+                                            _hover={{ cursor: "pointer" }}
                                         >
                                             <Text>{feature.name}</Text>
                                             <Text>{feature.completedUserStories}/{feature.userStoryCount}</Text>
@@ -87,6 +93,7 @@ const Project = () => {
                                             features={features}
                                             setFeatures={setFeatures}
                                             projectId={project.id}
+
                                         />)
                                 }
                             </Box>
@@ -95,15 +102,23 @@ const Project = () => {
                 })}
 
             </Box>
-            <FeatureModal
-            isOpen={isOpen}
-            onClose={onClose}
-            featureName={selectedFeature.name}
-            featureDescription={selectedFeature.description || "There is no description..."}
-            featureId={selectedFeature.id}/>
+            {selectedFeature && (
+                <FeatureModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    featureName={selectedFeature.name}
+                    featureDescription={selectedFeature.description || "There is no description..."}
+                    featureId={selectedFeature.id}
+                    projectId={project.id}
+                    stories={selectedFeature.userStories}
+                />
+)}
         </Box>
     )
 }
 
 
 export default Project
+function useAuth(): { user: any; loading: any; error: any; } {
+    throw new Error("Function not implemented.");
+}

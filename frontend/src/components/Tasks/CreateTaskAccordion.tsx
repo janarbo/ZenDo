@@ -1,68 +1,70 @@
 import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios";
-import { Feature } from "../../Pages/Project";
-import { useLoaderData } from "react-router-dom";
+import { UserStory } from "../Features/FeatureModal";
 
 
 
 
 type Props = {
-    features: Feature[];
-    setFeatures: React.Dispatch<React.SetStateAction<Feature[]>>;
-    projectId: number;
 
+    featureId: number;
+    projectId: number;
+    userStoryId: number;
 
 }
 
 
 
-const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
+const CreateTaskAccordion = ({ featureId, projectId, userStoryId }: Props) => {
 
     const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
     const [submitClickedName, setSubmitClickedName] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const toast = useToast();
-
 
     const isErrorName = name === "" && submitClickedName;
+    const toast = useToast()
 
-    const onChangeName = (e: any) => {
+
+
+
+
+    const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSubmitClickedName(false)
 
         setName(e.target.value);
     }
 
-    const onChangeDescription = (e: any) => {
-        setDescription(e.target.value);
 
-    }
 
     const onSubmit = () => {
         setSubmitClickedName(true)
 
         if (name !== "") {
             setIsOpen(false);
+            console.log("PRJECTID", projectId)
+            console.log("FEATUREID", featureId)
+            console.log("USER STORY ID", userStoryId)
 
             const token = localStorage.getItem("access_token")
 
-            axios.post('http://localhost:3030/auth/create-feature',
+            axios.post('http://localhost:3030/auth/create-task',
                 {
                     name,
-                    description,
                     projectId,
+                    featureId,
+                    userStoryId,
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
-                setFeatures(response.data);
                 setName("");
-                setDescription("");
                 setSubmitClickedName(false);
+
+
                 toast({
                     title: 'Success',
-                    description: `Your feature has been created!`,
+                    description: `Your developer task has been created!`,
                     status: 'success',
                     duration: 3000,
                     isClosable: true,
@@ -78,7 +80,7 @@ const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
 
     return (
         <Accordion allowToggle index={isOpen ? 0 : 1}>
-            <AccordionItem border="1px solid">
+            <AccordionItem borderTop="1px">
                 {({ isExpanded }) => (
                     <>
                         <h2>
@@ -89,36 +91,28 @@ const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
                                     <AddIcon fontSize='12px' />
                                 )}
                                 <Box as="span" flex='1' textAlign='left' ml={4} >
-                                    Add a feature
+                                    Add a Task
                                 </Box>
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4} borderTop="1px solid">
-                            <FormControl isInvalid={isErrorName} isRequired  >
-                                <FormLabel>Feature Name:</FormLabel>
+                            <FormControl isInvalid={isErrorName} isRequired  mb={4}>
+                                <FormLabel>Task Name:</FormLabel>
                                 <Input type="text" value={name} onChange={onChangeName} />
                                 {!isErrorName ? null : (
-                                    <FormErrorMessage>Feature name is required.</FormErrorMessage>
+                                    <FormErrorMessage>Developer task name is required.</FormErrorMessage>
                                 )}
                             </FormControl>
-                            <FormControl mb={4}>
-                                <FormLabel>Description</FormLabel>
-                                <Textarea value={description} onChange={onChangeDescription} />
-                                {!isErrorName ? null : (
-                                    <FormErrorMessage>Description is required.</FormErrorMessage>
-                                )}
-                            </FormControl>
-                            <Button w="100%" onClick={onSubmit}>Create Feature</Button>
+                            <Button  w="100%" onClick={onSubmit}>Create a Task</Button>
                         </AccordionPanel>
                     </>
                 )}
             </AccordionItem>
         </Accordion>
-
     )
 }
 
-export default CreateFeatureAccordion;
+export default CreateTaskAccordion;
 
 function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; variant: string; }) {
     throw new Error("Function not implemented.");

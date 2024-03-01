@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
-import { ProjectDto } from 'src/auth/auth.controller';
 
 @Injectable()
 export class ProjectsService {
@@ -13,11 +12,14 @@ export class ProjectsService {
     ){}
 
     async getUserProjects(id: number) {
-        return await this.projectsRepository.find({ where: { user: {id}}, relations: ['features'],  })
+        return await this.projectsRepository.find({
+             where: { user: {id}},
+             relations: ['features', 'features.userStories'],
+        })
     }
 
     async createProject(name: string, description: string, userId: number) {
-        return await this.projectsRepository.save({
+        await this.projectsRepository.save({
             name,
             description,
             user: {

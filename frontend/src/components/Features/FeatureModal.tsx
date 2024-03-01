@@ -1,5 +1,5 @@
 import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import UserStoryDetailsAccordion from "../UserStory/UserStoryDetailsAccordion";
 import CreateUserStoryAccordion from "../UserStory/CreateUserStoryAccordion";
 
@@ -10,41 +10,35 @@ type Props = {
     featureName: string;
     featureDescription: string;
     featureId: number;
+    projectId: number;
+    stories: UserStory[];
+
+
 }
 export type UserStory = {
     name: string;
     description: string;
     status: string;
+    id: number;
 }
 
-const sampleUserStories = [
-    {
-        name: "User Story",
-        description: "This is a description",
-        status: "2/10",
-    },
-    {
-        name: "User Story",
-        description: "This is a description",
-        status: "1/10",
-    },
-    {
-        name: "User Story",
-        description: "This is a description",
-        status: "3/8",
-    },
-
-    {
-        name: "User Story",
-        description: "This is a description",
-        status: "4/10",
-    },
-];
 
 
-const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featureId }: Props) => {
+const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featureId, projectId, stories }: Props) => {
 
-    const [userStories, setUserStories] = useState(sampleUserStories)
+    const [userStories, setUserStories] = useState(stories)
+    console.log("STORIES", stories)
+    console.log("USer stories", userStories)
+
+
+
+
+    useEffect(() => {
+        setUserStories(stories);
+    }, [stories])
+
+
+
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered  >
             <ModalOverlay />
@@ -61,23 +55,26 @@ const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featur
                     </Box>
                     <ModalCloseButton />
                     <Box display="flex" flexDirection="column" gap={4}>
-                    {sampleUserStories.map((story, index) => {
-                        return (
+                        {userStories.map((story) => {
+                            return (
                                 <UserStoryDetailsAccordion
-                                    name={`${story.name} ${index + 1}`}
+                                    name={story.name}
                                     status={story.status}
                                     description={story.description}
+                                    featureId={featureId}
+                                    userStoryId={story.id}
+                                    projectId={projectId}
                                 />
-                        );
-                    })}
-                       <CreateUserStoryAccordion
-                        userStories={userStories}
-                        setUserStories={setUserStories}
-                        featureId={featureId}
-                    />
+                            );
+                        })}
+                        <CreateUserStoryAccordion
+                            userStories={userStories}
+                            setUserStories={setUserStories}
+                            featureId={featureId}
+                            projectId={projectId}
 
+                        />
                     </Box>
-
                 </Box>
             </ModalContent>
         </Modal >

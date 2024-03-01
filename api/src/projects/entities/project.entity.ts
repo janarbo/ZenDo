@@ -1,4 +1,4 @@
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Feature } from 'src/features/entities/feature.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
@@ -13,10 +13,10 @@ export class Project {
   @Column()
   name: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   description?: string;
 
-  @Column({default: "To Do"})
+  @Column({ default: "To Do" })
   status: string;
 
   @OneToMany(() => Feature, (feature) => feature.project)

@@ -1,5 +1,5 @@
 import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from "@chakra-ui/react"
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { Project } from "../../Pages/Projects"
 import axios from "axios";
@@ -20,6 +20,7 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
   const [description, setDescription] = useState("");
   const [submitClickedName, setSubmitClickedName] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const toast = useToast()
 
   const isErrorName = name === "" && submitClickedName;
 
@@ -50,9 +51,9 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
           description,
         },
         { headers: { Authorization: `Bearer ${token}` } }
-      ).then((response) => {
-        // Merge the newly created project with the existing projects
-        setProjects([...projects, response.data]);
+      ).then((response: any) => {
+        console.log("Projects data:", response.data);
+        setProjects(response.data);
         setName("");
         setDescription("");
         setSubmitClickedName(false);

@@ -67,8 +67,7 @@ export class FeatureDto {
   @IsNotEmpty()
   projectId: number;
 
-  @IsNotEmpty()
-  userId: number;
+
 }
 
 export class UserStoryDto {
@@ -82,7 +81,27 @@ export class UserStoryDto {
 
   @IsNotEmpty()
   featureId: number;
+
+  @IsNotEmpty()
+  projectId: number;
+
 }
+
+
+
+export class TaskDto {
+  @IsNotEmpty()
+  @Transform((params) => sanitizeHtml(params.value))
+  name: string;
+
+  @IsNotEmpty()
+  featureId: number;
+
+  @IsNotEmpty()
+  projectId: number;
+
+}
+
 
 
 @Controller('auth')
@@ -179,7 +198,21 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('create-user-story')
   createUserStory(@Body() userStoryDto: UserStoryDto, @Request() req) {
-     console.log("USER STORY", userStoryDto, req.user.sub)
+
+     return this.authService.createUserStory(
+      userStoryDto.name,
+      userStoryDto.description,
+      userStoryDto.projectId,
+      userStoryDto.featureId,
+      req.user.sub,
+      )
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('create-task')
+  createTask(@Body() taskDto: TaskDto, @Request() req) {
+    console.log("TASK DTO", taskDto)
+
   }
 
 }

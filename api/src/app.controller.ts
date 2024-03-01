@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Delete, Patch } from '@nestjs/common';
 import { AppService } from './app.service';
-import { User } from './entities/user.entity';
+import { User } from './users/entities/user.entity';
 
 @Controller()
 export class AppController {
@@ -9,4 +9,4 @@ export class AppController {
   }
   constructor(private readonly appService: AppService) { }
 
-  }
+}

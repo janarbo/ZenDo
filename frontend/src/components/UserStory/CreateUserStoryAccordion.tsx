@@ -1,9 +1,7 @@
 import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from "@chakra-ui/react"
-import React, { useState } from "react"
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react"
+import React, { useEffect, useState } from "react"
 import axios from "axios";
-import { Feature } from "../../Pages/Project";
-import { useLoaderData } from "react-router-dom";
 import { UserStory } from "../Features/FeatureModal";
 
 
@@ -11,13 +9,15 @@ import { UserStory } from "../Features/FeatureModal";
 
 type Props = {
     userStories: UserStory[];
-    setUserStories: React.Dispatch<React.SetStateAction<UserStory[]>>;
+    setUserStories:React.Dispatch<React.SetStateAction<UserStory[]>>
     featureId: number;
+    projectId: number;
+
 }
 
 
 
-const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId }: Props) => {
+const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId, projectId}: Props) => {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -25,14 +25,18 @@ const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId }: Pr
     const [isOpen, setIsOpen] = useState(false);
 
     const isErrorName = name === "" && submitClickedName;
+    const toast = useToast()
 
-    const onChangeName = (e: any) => {
+
+
+
+    const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSubmitClickedName(false)
 
         setName(e.target.value);
     }
 
-    const onChangeDescription = (e: any) => {
+    const onChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
 
     }
@@ -43,24 +47,18 @@ const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId }: Pr
         if (name !== "") {
             setIsOpen(false);
 
-            console.log("NAME", name)
-            console.log("D", description)
-
             const token = localStorage.getItem("access_token")
-            const userId = localStorage.getItem('id');
-
 
             axios.post('http://localhost:3030/auth/create-user-story',
                 {
                     name,
                     description,
                     featureId,
-                    userId: Number(userId)
-
+                    projectId,
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
-                setUserStories([...userStories, response.data]);
+                setUserStories(response.data);
                 setName("");
                 setDescription("");
                 setSubmitClickedName(false);
@@ -78,12 +76,7 @@ const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId }: Pr
                 .catch((error) => {
                     console.log("ERROR", error);
                 })
-
-
         }
-
-
-
     }
 
 
