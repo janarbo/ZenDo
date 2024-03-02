@@ -10,8 +10,6 @@ export class CreateUserStoryTable1709195465796 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "user_story" DROP CONSTRAINT "FK_65784c20d2a4562774fa196596c"`);
-
         await queryRunner.query(`DROP TABLE "user_story"`);
     }
-
 }

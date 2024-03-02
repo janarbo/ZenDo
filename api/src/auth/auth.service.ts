@@ -10,10 +10,12 @@ import { MailService } from 'src/mail/mail.service';
 import { ProjectsService } from 'src/projects/project.service';
 import { FeaturesService } from 'src/features/feature.service';
 import { UserStoriesService } from 'src/userStories/userStories.service';
+import { TasksService } from 'src/Task/task.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private tasksService : TasksService,
     private userStoriesService: UserStoriesService,
     private featuresService: FeaturesService,
     private projectsService: ProjectsService,
@@ -193,15 +195,10 @@ export class AuthService {
     userId: number,
 
   ) {
-    console.log("USERID", userId)
-
     const projects = await this.projectsService.getUserProjects(userId);
-
     const project = projects.find((project) => project.id === projectId);
     const features = project.features;
-    console.log("FEATURES", features)
     const feature = features.find((feature) => feature.id === featureId);
-
 
     if (feature.id) {
       return await this.userStoriesService.createUserStory(
@@ -212,6 +209,36 @@ export class AuthService {
 
     } else {
       throw new UnauthorizedException("feature not found")
+    }
+
+
+  }
+
+
+  async createTask(
+    name: string,
+    userId: number,
+    projectId: number,
+    featureId: number,
+    userStoryId: number,
+
+  ) {
+    const projects = await this.projectsService.getUserProjects(userId);
+    const project = projects.find((project) => project.id === projectId);
+    const features = project.features;
+    const feature = features.find((feature) => feature.id === featureId);
+    const userStories = feature.userStories;
+    const userStory = userStories.find((story) => story.id === userStoryId );
+
+    console.log("USER STORY", userStory)
+    if (userStory.id) {
+      return await this.tasksService.createTask(
+        name,
+        userStoryId,
+      );
+
+    } else {
+      throw new UnauthorizedException("user story not found")
     }
 
 

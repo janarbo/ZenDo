@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe, Res, Param} from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request, UseGuards, ValidationPipe, Res, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -8,11 +8,11 @@ import { Transform } from 'class-transformer';
 
 
 type signInDto = {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
-export class AccountDetailDto  {
+export class AccountDetailDto {
   @IsNotEmpty()
   username: string;
 
@@ -26,7 +26,7 @@ export class AccountDetailDto  {
 }
 
 export class Email {
-  @IsEmail(undefined, {message: 'Please enter a valid email address!'})
+  @IsEmail(undefined, { message: 'Please enter a valid email address!' })
   @Transform((params) => sanitizeHtml(params.value))
   email: string;
 }
@@ -100,13 +100,18 @@ export class TaskDto {
   @IsNotEmpty()
   projectId: number;
 
+  @IsNotEmpty()
+  userStoryId: number;
+
+
+
 }
 
 
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @UseGuards(AuthGuard)
   @Get('user')
@@ -149,7 +154,7 @@ export class AuthController {
       body.newPassword,
       body.id,
       body.token,
-      );
+    );
   }
 
   @UseGuards(AuthGuard)
@@ -162,7 +167,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('user-projects')
   getUserProjects(@Request() req) {
-     return this.authService.getUserProjects(req.user.sub);
+    return this.authService.getUserProjects(req.user.sub);
 
   }
 
@@ -170,8 +175,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('project/:id')
   getProject(@Param('id') id: number, @Request() req) {
-     console.log("params", id);
-     return this.authService.getProject(req.user.sub, id)
+    console.log("params", id);
+    return this.authService.getProject(req.user.sub, id)
 
   }
 
@@ -198,21 +203,24 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('create-user-story')
   createUserStory(@Body() userStoryDto: UserStoryDto, @Request() req) {
-
-     return this.authService.createUserStory(
+    return this.authService.createUserStory(
       userStoryDto.name,
       userStoryDto.description,
       userStoryDto.projectId,
       userStoryDto.featureId,
       req.user.sub,
-      )
+    )
   }
 
   @UseGuards(AuthGuard)
   @Post('create-task')
   createTask(@Body() taskDto: TaskDto, @Request() req) {
-    console.log("TASK DTO", taskDto)
-
+    return this.authService.createTask (
+        taskDto.name,
+        req.user.sub,
+        taskDto.projectId,
+        taskDto.featureId,
+        taskDto.userStoryId,
+    )
   }
-
 }
