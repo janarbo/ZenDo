@@ -42,11 +42,7 @@ const Project = () => {
     const [features, setFeatures] = useState<Feature[]>(project.features)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedFeature, setSelectedFeature] = useState(features[0])
- 
-
-
-
-
+    console.log("FEATURES", features)
 
     return (
         <Box m={10}  >
@@ -64,7 +60,7 @@ const Project = () => {
                                 {column.name}
                             </Text>
                             {features.map((feature) => {
-                                if (column.name === feature.status) {
+                                if (column.name === "To Do") {
                                     return (
                                         <Box
                                             border="1px"

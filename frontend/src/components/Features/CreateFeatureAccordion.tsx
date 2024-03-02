@@ -13,7 +13,6 @@ type Props = {
     setFeatures: React.Dispatch<React.SetStateAction<Feature[]>>;
     projectId: number;
 
-
 }
 
 
@@ -56,6 +55,7 @@ const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
+                console.log("RESPONSE", response.data)
                 setFeatures(response.data);
                 setName("");
                 setDescription("");
