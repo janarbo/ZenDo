@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, Text, Button } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import CreateTaskAccordion from "../Tasks/CreateTaskAccordion";
 
 
@@ -10,6 +10,12 @@ type Props = {
     projectId: number;
     featureId: number;
     userStoryId: number;
+    tasks: Task[];
+}
+
+export type Task = {
+   name: string;
+   status: string;
 }
 
 const sampleDevTasks = [
@@ -33,7 +39,9 @@ const sampleDevTasks = [
         status: "To Do"
     }
 ]
-const UserStoryDetailsAccordion = ({ name, status, description, featureId, projectId, userStoryId }: Props) => {
+const UserStoryDetailsAccordion = ({ name, status, description, featureId, projectId, userStoryId, tasks }: Props) => {
+    const [devTasks, setDevTasks] = useState(tasks);
+
     return (
         <Accordion allowToggle color="grey">
             <AccordionItem border="1px">
@@ -48,7 +56,7 @@ const UserStoryDetailsAccordion = ({ name, status, description, featureId, proje
                     <Box p={4} pb={12}>
                         {description}
                     </Box>
-                    {sampleDevTasks.map((task) => {
+                    {devTasks.map((task) => {
                         return (
                             <Box
                                 display="flex"
@@ -63,7 +71,13 @@ const UserStoryDetailsAccordion = ({ name, status, description, featureId, proje
                             </Box>
                         );
                     })}
-                    <CreateTaskAccordion featureId={featureId} projectId={projectId} userStoryId={userStoryId} />
+                    <CreateTaskAccordion
+                        featureId={featureId}
+                        projectId={projectId}
+                        userStoryId={userStoryId}
+                        devTasks={devTasks}
+                        setDevTasks={setDevTasks}
+                    />
 
                 </AccordionPanel>
             </AccordionItem>

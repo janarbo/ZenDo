@@ -35,14 +35,13 @@ const columns = [
 
 
 const Project = () => {
-
-
     const data = useLoaderData() as ProjectType[];
     const project = data[0];
     const [features, setFeatures] = useState<Feature[]>(project.features)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedFeature, setSelectedFeature] = useState(features[0])
-    console.log("FEATURES", features)
+    console.log("DATA", features)
+
 
     return (
         <Box m={10}  >
@@ -108,7 +107,7 @@ const Project = () => {
                     projectId={project.id}
                     stories={selectedFeature.userStories}
                 />
-)}
+            )}
         </Box>
     )
 }

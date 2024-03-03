@@ -14,7 +14,11 @@ export class ProjectsService {
     async getUserProjects(id: number) {
         return await this.projectsRepository.find({
              where: { user: {id}},
-             relations: ['features', 'features.userStories'],
+             relations: [
+                'features',
+                'features.userStories',
+                'features.userStories.tasks'
+            ],
         })
     }
 

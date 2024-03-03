@@ -1,6 +1,6 @@
 import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import UserStoryDetailsAccordion from "../UserStory/UserStoryDetailsAccordion";
+import UserStoryDetailsAccordion, { Task } from "../UserStory/UserStoryDetailsAccordion";
 import CreateUserStoryAccordion from "../UserStory/CreateUserStoryAccordion";
 
 
@@ -20,16 +20,13 @@ export type UserStory = {
     description: string;
     status: string;
     id: number;
+    tasks: Task[];
 }
 
 
 
 const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featureId, projectId, stories }: Props) => {
-
     const [userStories, setUserStories] = useState(stories)
-    console.log("STORIES", stories)
-    console.log("USer stories", userStories)
-
 
 
 
@@ -64,6 +61,7 @@ const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featur
                                     featureId={featureId}
                                     userStoryId={story.id}
                                     projectId={projectId}
+                                    tasks={story.tasks}
                                 />
                             );
                         })}

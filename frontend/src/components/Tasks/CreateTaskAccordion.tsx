@@ -3,6 +3,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import React, { useEffect, useState } from "react"
 import axios from "axios";
 import { UserStory } from "../Features/FeatureModal";
+import { Task } from "../UserStory/UserStoryDetailsAccordion";
 
 
 
@@ -12,12 +13,14 @@ type Props = {
     featureId: number;
     projectId: number;
     userStoryId: number;
+    devTasks: Task[];
+    setDevTasks: React.Dispatch<React.SetStateAction<Task[]>>
 
 }
 
 
 
-const CreateTaskAccordion = ({ featureId, projectId, userStoryId }: Props) => {
+const CreateTaskAccordion = ({ devTasks, setDevTasks, featureId, projectId, userStoryId }: Props) => {
 
     const [name, setName] = useState("");
     const [submitClickedName, setSubmitClickedName] = useState(false);
@@ -25,6 +28,7 @@ const CreateTaskAccordion = ({ featureId, projectId, userStoryId }: Props) => {
 
     const isErrorName = name === "" && submitClickedName;
     const toast = useToast()
+
 
 
 
@@ -43,10 +47,6 @@ const CreateTaskAccordion = ({ featureId, projectId, userStoryId }: Props) => {
 
         if (name !== "") {
             setIsOpen(false);
-            console.log("PRJECTID", projectId)
-            console.log("FEATUREID", featureId)
-            console.log("USER STORY ID", userStoryId)
-
             const token = localStorage.getItem("access_token")
 
             axios.post('http://localhost:3030/auth/create-task',
@@ -58,6 +58,8 @@ const CreateTaskAccordion = ({ featureId, projectId, userStoryId }: Props) => {
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
+                console.log("RESPONSE", response.data)
+                setDevTasks(response.data);
                 setName("");
                 setSubmitClickedName(false);
 

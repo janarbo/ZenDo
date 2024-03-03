@@ -12,7 +12,8 @@ export class UserStoriesService {
     ){}
 
     async getFeatureUserStories(id: number) {
-        return await this.userStoriesRepository.find({ where: { feature: {id}}  })
+        return await this.userStoriesRepository.find({ where: { feature: {id}},
+            relations: ["tasks"] })
     }
 
     async createUserStory(name: string, description: string, featureId: number) {
