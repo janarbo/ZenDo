@@ -12,6 +12,10 @@ export class ProjectsService {
     ) { }
 
     addStatusesToProject(project: Project){
+        const featureCount = project.features.length;
+        let completedFeatures = 0;
+        let projectStarted = false;
+
         project.features.forEach((feature) => {
             feature["userStoryCount"] = feature.userStories.length;
             feature["completedUserStories"] = 0;
@@ -31,6 +35,7 @@ export class ProjectsService {
 
                 if(completedTasks > 0 || inProgressTasks > 0) {
                     featureStarted = true;
+                    projectStarted = true;
                 }
 
                 if (story["taskCount"] === completedTasks && story["taskCount"] > 0)  {
@@ -44,11 +49,24 @@ export class ProjectsService {
                feature["userStoryCount"] === feature['completedUserStories']
             ) {
                 feature["status"] = "Done!";
+                completedFeatures ++;
             } else {
                 feature["status"] = "In Progress";
             }
         });
+
+            if(!projectStarted){
+                project["status"] = "To Do";
+            } else if (
+                featureCount === completedFeatures
+            ) {
+                project["status"] = "Done!";
+                completedFeatures ++;
+            } else {
+                project["status"] = "In Progress";
+            }
         return project;
+
     }
 
 
