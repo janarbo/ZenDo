@@ -39,7 +39,6 @@ const ResetPassword = () => {
             token,
         })
         .then((response) => {
-            console.log("RESPONSE", response.data);
             setPassword("");
             setSecondPassword("");
             navigate("/log-in");
@@ -65,7 +64,6 @@ const ResetPassword = () => {
         })
     }
 
-    console.log('PARAMSS', token)
     return(
         <Box>
       <Text textAlign='center' mt={20} mb={4} fontSize={20}>Reset Your Password </Text>

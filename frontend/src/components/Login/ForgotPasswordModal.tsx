@@ -29,7 +29,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }: Props)=> {
                })
                .then((response) => {
                  setEmail("");
-                 console.log("RESPONSE", response)
+        
                  toast({
                   title: 'Success',
                   description: 'Check your email account for further directions',

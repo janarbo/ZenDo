@@ -51,6 +51,7 @@ const Projects = () => {
                         mb={6}
                         onClick={() => {goToProject(project.id)}}
                         _hover={{cursor: "pointer", backgroundColor: "#E6E6FA"}}
+                        key={project.id}
                     >
                         <Text w="15%">{project.name}</Text>
                         <Text  noOfLines={1} flex={1}>{project.description}</Text>

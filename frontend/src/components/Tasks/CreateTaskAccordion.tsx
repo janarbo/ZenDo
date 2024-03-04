@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import axios from "axios";
 import { UserStory } from "../Features/FeatureModal";
 import { Task } from "../UserStory/UserStoryDetailsAccordion";
+import { Project } from "../../Pages/Projects";
 
 
 
@@ -13,14 +14,13 @@ type Props = {
     featureId: number;
     projectId: number;
     userStoryId: number;
-    devTasks: Task[];
-    setDevTasks: React.Dispatch<React.SetStateAction<Task[]>>
+    setProject: React.Dispatch<React.SetStateAction<Project>>;
 
 }
 
 
 
-const CreateTaskAccordion = ({ devTasks, setDevTasks, featureId, projectId, userStoryId }: Props) => {
+const CreateTaskAccordion = ({ setProject, featureId, projectId, userStoryId}: Props) => {
 
     const [name, setName] = useState("");
     const [submitClickedName, setSubmitClickedName] = useState(false);
@@ -58,8 +58,8 @@ const CreateTaskAccordion = ({ devTasks, setDevTasks, featureId, projectId, user
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
-                console.log("RESPONSE", response.data)
-                setDevTasks(response.data);
+                console.log("PROJECT", response.data)
+                setProject(response.data)
                 setName("");
                 setSubmitClickedName(false);
 

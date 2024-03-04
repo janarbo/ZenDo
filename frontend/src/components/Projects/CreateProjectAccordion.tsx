@@ -25,7 +25,6 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
   const isErrorName = name === "" && submitClickedName;
 
   const onChangeName = (e: any) => {
-    console.log('onChangeName function called'); // Add this line
 
     setSubmitClickedName(false)
 
@@ -39,7 +38,7 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
 
   const onSubmit = () => {
     setSubmitClickedName(true)
-    console.log("NAME", name)
+
 
 
     if (name !== "") {
@@ -52,7 +51,7 @@ const CreateProjectAccordion = ({ projects, setProjects }: Props) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       ).then((response: any) => {
-        console.log("Projects data:", response.data);
+
         setProjects(response.data);
         setName("");
         setDescription("");

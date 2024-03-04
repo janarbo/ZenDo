@@ -73,7 +73,7 @@ const router = createBrowserRouter([
               return redirect('/log-in');
             }
           } else {
-            console.log("Token", token)
+
             toast({
               title: 'An error occurred.',
               description: 'You must have an account to view this page.',
@@ -123,7 +123,6 @@ const router = createBrowserRouter([
               return redirect('/log-in');
             }
           } else {
-            console.log("Token", token)
             toast({
               title: 'An error occurred.',
               description: 'You must have an account to view this page.',
@@ -160,7 +159,7 @@ const router = createBrowserRouter([
               return redirect('/log-in');
             }
           } else {
-            console.log("Token", token)
+
             toast({
               title: 'An error occurred.',
               description: 'You must have an account to view this page.',

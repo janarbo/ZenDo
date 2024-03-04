@@ -2,22 +2,24 @@ import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
 import axios from "axios";
-import { Feature } from "../../Pages/Project";
+import  { Feature } from "../../Pages/Project";
 import { useLoaderData } from "react-router-dom";
+import { Project } from "../../Pages/Projects";
+
 
 
 
 
 type Props = {
     features: Feature[];
-    setFeatures: React.Dispatch<React.SetStateAction<Feature[]>>;
+    setProject: React.Dispatch<React.SetStateAction<Project>>;
     projectId: number;
 
 }
 
 
 
-const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
+const CreateFeatureAccordion = ({ features, setProject, projectId}: Props) => {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -55,8 +57,7 @@ const CreateFeatureAccordion = ({ features, setFeatures, projectId}: Props) => {
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
-                console.log("RESPONSE", response.data)
-                setFeatures(response.data);
+                setProject(response.data);
                 setName("");
                 setDescription("");
                 setSubmitClickedName(false);

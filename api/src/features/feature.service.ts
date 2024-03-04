@@ -14,6 +14,9 @@ export class FeaturesService {
     async getProjectFeatures(id: number) {
         return await this.featuresRepository.find({
             where: { project: {id}},
+            order: {
+                    id: "ASC",
+             },
             relations: ["userStories", "userStories.tasks"],
         })
     }

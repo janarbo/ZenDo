@@ -2,22 +2,24 @@ import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import axios from "axios";
-import { UserStory } from "../Features/FeatureModal";
+import { Project } from "../../Pages/Projects";
 
 
 
 
 type Props = {
-    userStories: UserStory[];
-    setUserStories:React.Dispatch<React.SetStateAction<UserStory[]>>
     featureId: number;
     projectId: number;
-
+    setProject: React.Dispatch<React.SetStateAction<Project>>
 }
 
 
 
-const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId, projectId}: Props) => {
+const CreateUserStoryAccordion = ({
+        featureId,
+        projectId,
+        setProject
+    }: Props) => {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -58,7 +60,7 @@ const CreateUserStoryAccordion = ({ userStories, setUserStories, featureId, proj
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((response) => {
-                setUserStories(response.data);
+                setProject(response.data);
                 setName("");
                 setDescription("");
                 setSubmitClickedName(false);

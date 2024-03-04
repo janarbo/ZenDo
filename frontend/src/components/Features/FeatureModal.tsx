@@ -2,6 +2,8 @@ import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, Mo
 import React, { useEffect, useState } from "react"
 import UserStoryDetailsAccordion, { Task } from "../UserStory/UserStoryDetailsAccordion";
 import CreateUserStoryAccordion from "../UserStory/CreateUserStoryAccordion";
+import { Project } from "../../Pages/Projects";
+import { setSyntheticLeadingComments } from "typescript";
 
 
 type Props = {
@@ -12,6 +14,7 @@ type Props = {
     featureId: number;
     projectId: number;
     stories: UserStory[];
+    setProject: React.Dispatch<React.SetStateAction<Project>>
 
 
 }
@@ -21,18 +24,24 @@ export type UserStory = {
     status: string;
     id: number;
     tasks: Task[];
+    completedTasks: number;
+    taskCount: number;
+
 }
 
 
 
-const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featureId, projectId, stories }: Props) => {
-    const [userStories, setUserStories] = useState(stories)
+const FeatureModal = ({
+        isOpen,
+        onClose,
+        featureName,
+        featureDescription,
+        featureId,
+        projectId,
+        stories,
+        setProject
+    }: Props) => {
 
-
-
-    useEffect(() => {
-        setUserStories(stories);
-    }, [stories])
 
 
 
@@ -52,25 +61,25 @@ const FeatureModal = ({ isOpen, onClose, featureName, featureDescription, featur
                     </Box>
                     <ModalCloseButton />
                     <Box display="flex" flexDirection="column" gap={4}>
-                        {userStories.map((story) => {
+                        {stories.map((story) => {
                             return (
                                 <UserStoryDetailsAccordion
                                     name={story.name}
-                                    status={story.status}
+                                    status={`${story.completedTasks}/${story.taskCount}`}
                                     description={story.description}
                                     featureId={featureId}
                                     userStoryId={story.id}
                                     projectId={projectId}
                                     tasks={story.tasks}
+                                    key={story.id}
+                                    setProject={setProject}
                                 />
                             );
                         })}
                         <CreateUserStoryAccordion
-                            userStories={userStories}
-                            setUserStories={setUserStories}
                             featureId={featureId}
                             projectId={projectId}
-
+                            setProject={setProject}
                         />
                     </Box>
                 </Box>
