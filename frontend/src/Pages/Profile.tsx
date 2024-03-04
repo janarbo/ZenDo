@@ -46,7 +46,6 @@ const Profile = () => {
 
     const deleteAccount = () => {
         const token = localStorage.getItem("access_token")
-        console.log("TOKEN", token)
         axios.post('http://localhost:3030/auth/delete-user', {},
         { headers: { Authorization: `Bearer ${token}` } }
         ).then((response) => {

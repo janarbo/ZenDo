@@ -5,10 +5,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 import { MailModule } from 'src/mail/mail.module';
+import { ProjectsModule } from 'src/projects/project.module';
+import { FeaturesModule } from 'src/features/feature.module';
+import { UserStoriesModule } from 'src/userStories/userStories.module';
+import { TasksModule } from 'src/Task/task.module';
 
 
 @Module({
   imports: [
+    TasksModule,
+    UserStoriesModule,
+    FeaturesModule,
+    ProjectsModule,
     MailModule,
     UsersModule,
     JwtModule.register({

@@ -3,29 +3,38 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
-import { AccountDetailDto } from './auth.controller';
-import { User } from 'src/entities/user.entity';
+import { AccountDetailDto, ProjectDto } from './auth.controller';
+import { User } from 'src/users/entities/user.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { MailService } from 'src/mail/mail.service';
+import { ProjectsService } from 'src/projects/project.service';
+import { FeaturesService } from 'src/features/feature.service';
+import { UserStoriesService } from 'src/userStories/userStories.service';
+import { TasksService } from 'src/Task/task.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private tasksService : TasksService,
+    private userStoriesService: UserStoriesService,
+    private featuresService: FeaturesService,
+    private projectsService: ProjectsService,
     private usersService: UsersService,
     private mailService: MailService,
     private jwtService: JwtService,
 
-  ) {}
+  ) { }
 
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
   }
 
-  async createAccessToken(user: User, secret?:string) {
-    const payload = { sub:user.id}
+  async createAccessToken(user: User, secret?: string) {
+    const payload = { sub: user.id }
     if (secret) {
       return await this.jwtService.signAsync(payload,
-        {secret: user.password,
+        {
+          secret: user.password,
           expiresIn: "10m",
         });
     } else {
@@ -35,20 +44,20 @@ export class AuthService {
 
 
   async signIn(username: string, password: string) {
-  const user = await this.usersService.findUserByUsername(username);
-  if (user !== null) {
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new UnauthorizedException();
+    const user = await this.usersService.findUserByUsername(username);
+    if (user !== null) {
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        throw new UnauthorizedException();
+      }
+      const payload = { sub: user.id, username: user.username };
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    } else {
+      throw new UnauthorizedException('Invalid credentials');
+    }
   }
-  const payload = { sub: user.id, username: user.username };
-  return {
-    access_token: await this.jwtService.signAsync(payload),
-   };
-  } else {
-    throw new UnauthorizedException('Invalid credentials');
-  }
-}
 
 
 
@@ -99,39 +108,138 @@ export class AuthService {
     const user = await this.usersService.findUserByUserID(id)
     await this.jwtService.verifyAsync(token, {
       secret: user.password,
-    }).catch((error)=>{
+    }).catch((error) => {
       console.log("ERROR", error);
       throw new UnauthorizedException;
-    }).then(async ()=> {
+    }).then(async () => {
       const hashedPassword = await this.hashPassword(newPassword);
       user.password = hashedPassword;
       return await this.usersService.create(user);
     });
   }
 
- async changeAccountDetails(accountDetailDto: AccountDetailDto) {
-  const user = await this.usersService.findUserByUsername(
-    accountDetailDto.username,
-  )
+  async changeAccountDetails(accountDetailDto: AccountDetailDto) {
+    const user = await this.usersService.findUserByUsername(
+      accountDetailDto.username,
+    )
 
-  if (accountDetailDto.field === 'password') {
-    const plainTextPassword = accountDetailDto.value;
-    const hashedPassword = await this.hashPassword(plainTextPassword);
-    user[accountDetailDto.field] = hashedPassword;
-  } else {
-    user[accountDetailDto.field] = accountDetailDto.value;
+    if (accountDetailDto.field === 'password') {
+      const plainTextPassword = accountDetailDto.value;
+      const hashedPassword = await this.hashPassword(plainTextPassword);
+      user[accountDetailDto.field] = hashedPassword;
+    } else {
+      user[accountDetailDto.field] = accountDetailDto.value;
+    }
+    const updatedUser = await this.usersService.create(user);
+    return {
+      name: updatedUser.name,
+      email: updatedUser.email,
+      username: updatedUser.username,
+    };
   }
-  const updatedUser = await this.usersService.create(user);
-  return {
-    name: updatedUser.name,
-    email: updatedUser.email,
-    username: updatedUser.username,
-  };
- }
 
- async deleteUser(id: number) {
-  return await this.usersService.deleteUser(id);
- }
+  async deleteUser(id: number) {
+    return await this.usersService.deleteUser(id);
+  }
+
+  async createProject(name: string, description: string, userId: number) {
+    return await this.projectsService.createProject(name, description, userId);
+  }
+
+  async getUserProjects(userId: number) {
+    const user = await this.getProfileData(userId);
+    const projects = await this.projectsService.getUserProjects(userId);
+
+    return {
+      user,
+      projects,
+    };
+  }
+
+  async getProject(userId: number, id: number) {
+    const projects = await this.projectsService.getUserProjects(userId)
+    return projects.find((project) => project.id === id);
+  }
+
+  async createFeature(
+    name: string,
+    description: string,
+    projectId: number,
+    userId: number,
+  ) {
+    const projects = await this.projectsService.getUserProjects(userId);
+    const project = projects.find((project) => project.id === projectId);
+
+    if (project) {
+      await this.featuresService.createFeature(
+        name,
+        description,
+        projectId,
+      );
+      return await this.projectsService.getProjectById(projectId)
+
+    } else {
+      throw new UnauthorizedException("Project not found");
+
+    }
+  }
+
+
+  async createUserStory(
+    name: string,
+    description: string,
+    projectId: number,
+    featureId: number,
+    userId: number,
+
+  ) {
+    const projects = await this.projectsService.getUserProjects(userId);
+    const project = projects.find((project) => project.id === projectId);
+    const features = project.features;
+    const feature = features.find((feature) => feature.id === featureId);
+
+    if (feature.id) {
+      await this.userStoriesService.createUserStory(
+        name,
+        description,
+        featureId,
+      );
+      return await this.projectsService.getProjectById(projectId)
+
+    } else {
+      throw new UnauthorizedException("feature not found")
+    }
+
+
+  }
+
+
+  async createTask(
+    name: string,
+    userId: number,
+    projectId: number,
+    featureId: number,
+    userStoryId: number,
+
+  ) {
+    const projects = await this.projectsService.getUserProjects(userId);
+    const project = projects.find((project) => project.id === projectId);
+    const features = project.features;
+    const feature = features.find((feature) => feature.id === featureId);
+    const userStories = feature.userStories;
+    const userStory = userStories.find((story) => story.id === userStoryId );
+
+    if (userStory.id) {
+      await this.tasksService.createTask(
+        name,
+        userStoryId,
+      );
+      return await this.projectsService.getProjectById(projectId);
+    } else {
+      throw new UnauthorizedException("user story not found")
+    }
+  }
+
 
 
 
