@@ -1,7 +1,8 @@
-import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, Text, Button } from "@chakra-ui/react"
-import React, { useState } from "react"
+import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, Text } from "@chakra-ui/react"
+import React from "react"
 import CreateTaskAccordion from "../Tasks/CreateTaskAccordion";
 import { Project } from "../../Pages/Projects";
+import TaskBox from "../Tasks/TaskBox";
 
 
 type Props = {
@@ -44,6 +45,9 @@ const sampleDevTasks = [
 ]
 const UserStoryDetailsAccordion = ({ name, status, description, featureId, projectId, userStoryId, tasks, setProject }: Props) => {
 
+    const toggleTaskStatus = () => {
+        console.log("Hi")
+    }
 
 
     return (
@@ -61,21 +65,7 @@ const UserStoryDetailsAccordion = ({ name, status, description, featureId, proje
                         {description}
                     </Box>
                     {tasks.map((task) => {
-                        return (
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                borderTop="1px"
-                                alignItems="center"
-                                px={4}
-                                py={2}
-                                key={task.name}
-
-                            >
-                                <Text>{task.name}</Text>
-                                <Button>{task.status}</Button>
-                            </Box>
-                        );
+                        return <TaskBox task={task} setProject={setProject}/>
                     })}
                     <CreateTaskAccordion
                         featureId={featureId}

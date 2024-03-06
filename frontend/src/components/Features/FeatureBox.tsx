@@ -17,13 +17,15 @@ const FeatureBox = ({feature, projectId, setProject}: Props) => {
     return (
         <>
         <Box
-            border="1px"
+            bgColor="##eaf4fc"//#eaebfc
             p={4}
             m={4}
+            border="1px solid #d4d6d8"
             display="flex"
             justifyContent="space-between"
             onClick={onOpen}
-            _hover={{ cursor: "pointer" }}
+            _hover={{ cursor: "pointer", bg:"#eaf4fc"}}
+
             key={feature.id}
         >
             <Text>{feature.name}</Text>

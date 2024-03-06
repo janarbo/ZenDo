@@ -240,6 +240,12 @@ export class AuthService {
     }
   }
 
+  async updateTask(field: string, value: string, userId: number, taskId: number) {
+    const projectId = await this.tasksService.updateTask(field, value, userId, taskId);
+    console.log("PROJECT ID", projectId)
+    return await this.projectsService.getProjectById(projectId)
+  }
+
 
 
 

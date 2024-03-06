@@ -39,14 +39,14 @@ const Projects = () => {
     }
 
     return (
-        <Box>
-        <Text textAlign='center' mt={20} mb={4} fontSize={20}> {user.name}'s Projects</Text>
+        <Box >
+        <Text textAlign='center' mt={20} mb={4} fontSize={20} > {user.name}'s Projects</Text>
         <Box m={10}>
         {projects.map((project) => {
                 return (
                     <Box
                         display="flex"
-                        border="1px solid"
+                        border="1px solid #d4d6d8"
                         p={5}
                         mb={6}
                         onClick={() => {goToProject(project.id)}}
@@ -60,8 +60,6 @@ const Projects = () => {
                 );
         })}
         <CreateProjectAccordion projects={projects} setProjects={setProjects} />
-
-
         </Box>
         </Box>
     )
