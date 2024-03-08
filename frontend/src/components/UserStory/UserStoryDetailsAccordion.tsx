@@ -54,7 +54,7 @@ const UserStoryDetailsAccordion = ({ name, status, description, featureId, proje
         <Accordion allowToggle color="grey">
             <AccordionItem border="1px">
                 <h2>
-                    <AccordionButton display="flex" justifyContent="space-between" p={4}>
+                    <AccordionButton backgroundColor="rgba(234, 244, 252, 0.5)" display="flex" justifyContent="space-between" p={4}>
                         <Text flex={1} textAlign="left">{name}</Text>
                         <Text>{status}</Text>
                         <AccordionIcon />
@@ -72,7 +72,6 @@ const UserStoryDetailsAccordion = ({ name, status, description, featureId, proje
                         projectId={projectId}
                         userStoryId={userStoryId}
                         setProject={setProject}
-
                     />
 
                 </AccordionPanel>

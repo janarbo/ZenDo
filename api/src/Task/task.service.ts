@@ -35,11 +35,6 @@ export class TasksService {
                 "userStory.feature",
                 "userStory.feature.project"]
 
-
-
-
-
-
             });
 
         if (taskToUpdate){

@@ -41,6 +41,7 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                     isClosable: true,
                     variant: "subtle",
                   });
+                setValueState(value);
                 return;
             }
         } else {
@@ -53,6 +54,10 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
                     isClosable: true,
                     variant: "subtle",
                 });
+                if (field !== "Password") {
+                    setValueState(value);
+                }
+
                 return;
 
             }
@@ -92,28 +97,26 @@ const UserDetailsRow = ({field, value, username, setData}: Props) =>{
     }
 
     return (
-    <Box display='flex' gap={2}>
-        <Text flex={1} lineHeight='32px'>{field}:</Text>
-        {updateField ? (
-            <Input
-            flex={1}
-            h='32px'
-            value={valueState}
-            onChange={onChange}
-            type={field === 'Password' ? 'password' : 'text'}
-        />
-        ) : (
-        <Text flex={1} lineHeight='32px'>{field === 'Password' ? '********' :valueState}</Text>
-        )}
-        <IconButton
-            aria-label='Edit Name'
-            icon={updateField ? <CheckIcon /> : <EditIcon />}
-            size='sm'
-            onClick={updateField? onClickCheck : onClickEdit}
-        />
-    </Box>
-
-
+        <Box display='flex' gap={2}>
+            <Text flex={1} lineHeight='32px'>{field}:</Text>
+            {updateField ? (
+                <Input
+                flex={1}
+                h='32px'
+                value={valueState}
+                onChange={onChange}
+                type={field === 'Password' ? 'password' : 'text'}
+            />
+            ) : (
+            <Text flex={1} lineHeight='32px'>{field === 'Password' ? '********' :valueState}</Text>
+            )}
+            <IconButton
+                aria-label='Edit Name'
+                icon={updateField ? <CheckIcon /> : <EditIcon />}
+                size='sm'
+                onClick={updateField? onClickCheck : onClickEdit}
+            />
+        </Box>
     )
 }
 
