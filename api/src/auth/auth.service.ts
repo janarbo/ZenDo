@@ -109,7 +109,7 @@ export class AuthService {
     await this.jwtService.verifyAsync(token, {
       secret: user.password,
     }).catch((error) => {
-      console.log("ERROR", error);
+    
       throw new UnauthorizedException;
     }).then(async () => {
       const hashedPassword = await this.hashPassword(newPassword);
@@ -241,9 +241,9 @@ export class AuthService {
   }
 
   async updateTask(field: string, value: string, userId: number, taskId: number) {
-    const projectId = await this.tasksService.updateTask(field, value, userId, taskId);
-    console.log("PROJECT ID", projectId)
-    return await this.projectsService.getProjectById(projectId)
+    const userStoryId = await this.tasksService.updateTask(field, value, userId, taskId);
+
+    return await this.userStoriesService.getUserStoryStatusById(userStoryId);
   }
 
 

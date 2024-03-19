@@ -9,10 +9,10 @@ import { CheckIcon, EditIcon } from "@chakra-ui/icons";
 
 type Props = {
     task: Task;
-    setProject: React.Dispatch<React.SetStateAction<Project>>
+    setStoryStatus:  React.Dispatch<React.SetStateAction<string>>;
 }
 
-const TaskBox = ({ task, setProject}: Props) => {
+const TaskBox = ({ task, setStoryStatus }: Props) => {
     const [taskStatus, setTaskStatus] = useState(task.status)
     const toast = useToast()
     const navigate = useNavigate()
@@ -61,8 +61,8 @@ const TaskBox = ({ task, setProject}: Props) => {
             { headers: { Authorization: `Bearer ${token}` } }
         )
             .then((response) => {
-                console.log("RESPONSE", response.data)
-                setProject(response.data)
+
+                setStoryStatus(response.data)
                 setUpdateName(false)
 
                 toast({
