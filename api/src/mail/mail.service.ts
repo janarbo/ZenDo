@@ -7,7 +7,7 @@ import { resetPasswordTemplate } from "./reset-password-template";
 export class MailService {
 
   async sendPasswordResetEmail(user: User, token: string) {
-    console.log('TOKEN', token)
+    
     sendMail(
       {
         from: "janarboke@gmail.com",

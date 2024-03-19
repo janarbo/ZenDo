@@ -109,7 +109,7 @@ export class AuthService {
     await this.jwtService.verifyAsync(token, {
       secret: user.password,
     }).catch((error) => {
-      console.log("ERROR", error);
+    
       throw new UnauthorizedException;
     }).then(async () => {
       const hashedPassword = await this.hashPassword(newPassword);
@@ -238,6 +238,12 @@ export class AuthService {
     } else {
       throw new UnauthorizedException("user story not found")
     }
+  }
+
+  async updateTask(field: string, value: string, userId: number, taskId: number) {
+    const userStoryId = await this.tasksService.updateTask(field, value, userId, taskId);
+
+    return await this.userStoriesService.getUserStoryStatusById(userStoryId);
   }
 
 

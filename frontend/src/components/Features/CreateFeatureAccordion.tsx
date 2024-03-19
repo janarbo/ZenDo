@@ -79,11 +79,11 @@ const CreateFeatureAccordion = ({ features, setProject, projectId}: Props) => {
 
     return (
         <Accordion allowToggle index={isOpen ? 0 : 1}>
-            <AccordionItem border="1px solid">
+            <AccordionItem border="1px solid #d4d6d8">
                 {({ isExpanded }) => (
                     <>
                         <h2>
-                            <AccordionButton onClick={() => setIsOpen(!isOpen)} h="58px" >
+                            <AccordionButton onClick={() => setIsOpen(!isOpen)} h="58px" bgColor="#eaebfc" >
                                 {isExpanded ? (
                                     <MinusIcon fontSize='12px' />
                                 ) : (
@@ -94,7 +94,7 @@ const CreateFeatureAccordion = ({ features, setProject, projectId}: Props) => {
                                 </Box>
                             </AccordionButton>
                         </h2>
-                        <AccordionPanel pb={4} borderTop="1px solid">
+                        <AccordionPanel pb={4} borderTop="1px solid ">
                             <FormControl isInvalid={isErrorName} isRequired  >
                                 <FormLabel>Feature Name:</FormLabel>
                                 <Input type="text" value={name} onChange={onChangeName} />
@@ -109,7 +109,7 @@ const CreateFeatureAccordion = ({ features, setProject, projectId}: Props) => {
                                     <FormErrorMessage>Description is required.</FormErrorMessage>
                                 )}
                             </FormControl>
-                            <Button w="100%" onClick={onSubmit}>Create Feature</Button>
+                            <Button w="100%" onClick={onSubmit} >Create Feature</Button>
                         </AccordionPanel>
                     </>
                 )}

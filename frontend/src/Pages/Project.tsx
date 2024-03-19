@@ -42,7 +42,6 @@ const Project = () => {
 
     const [project, setProject] = useState(loaderData);
 
-    console.log("PROJECT", project)
 
 
 
@@ -50,16 +49,17 @@ const Project = () => {
 
     return (
         <Box m={10}  >
-            <Box>
-                <Text mt={20} mb={4} fontSize={20} >
+            <Box border="1px solid transparent" >
+            {/* backgroundColor='#eaebfc' */}
+                <Text mt={5} mb={2} fontSize={20} color="grey">
                     {project.name}
                 </Text>
-                <Text>{project.description || "There is no project description"}</Text>
+                <Text  mb={5} color="grey">{project.description || "There is no project description"}</Text>
             </Box>
-            <Box display="flex" gap={10} h="100vh" mt={20}>
+            <Box display="flex" gap={10} h="80vh" mt={10} >
                 {columns.map((column) => {
                     return (
-                        <Box flex={1} border="1px" mb={20} key={column.name}>
+                        <Box flex={1} border="" mb={20} key={column.name} backgroundColor="rgba(234, 244, 252, 0.5)">
                             <Text fontSize={20} textAlign="center" mt={2}>
                                 {column.name}
                             </Text>
